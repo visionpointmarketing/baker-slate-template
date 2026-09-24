@@ -1,0 +1,1 @@
+# baker-slate-template
