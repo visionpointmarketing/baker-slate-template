@@ -30,7 +30,8 @@ needed if you want paths to behave exactly as they do in Slate.
 
 ```
 baker-slate-template/
-├── index.html          ← staging page for client review
+├── index.html          ← staging: a form page          (GENERATED)
+├── portal.html         ← staging: a checklist/portal page (GENERATED)
 ├── README.md
 ├── shared/             ← mirrors Slate's /shared/ — these three files ship
 │   ├── build.xslt          page template wrapping every Slate page
@@ -40,9 +41,16 @@ baker-slate-template/
 ├── images/             ← mirrors Slate's /images/
 │   ├── logo-baker.svg      the one branding asset
 │   └── README.md
+├── tools/
+│   ├── make-staging.py     regenerates the staging pages from build.xslt
+│   └── demo/               the demo content each staging page wraps
 └── reference/          ← Baker's CURRENT Slate files, for diffing. Never ships.
     └── README.md
 ```
+
+Two staging pages, because Slate lays out two kinds of page differently: a form
+at a reading measure, and a checklist/portal with a sidebar at a wider one. One
+page showing both at once would misrepresent each.
 
 The folder names are not decoration. `shared/` and `images/` are the paths
 those files live at inside Slate, which is what lets the same CSS work in both
@@ -69,12 +77,18 @@ The one difference between environments is that logo's path:
 
 Everything else is shared. There is no "remember to update both" step.
 
-The header and footer markup does exist twice — once in `index.html`, once in
-`build.xslt` — because XSLT and HTML can't share a partial without adding a
-build step. `index.html` is generated from `build.xslt`'s markup, so if the
-chrome changes, change `build.xslt` first and re-derive. Two files is a
-tolerable amount of duplication; if this template grows past that, a static
-site generator is the next step, not a bigger find-and-replace.
+The header and footer markup is not duplicated either. `build.xslt` is the only
+place it's written; the staging pages are generated from it:
+
+```bash
+python3 tools/make-staging.py
+```
+
+That script lifts the chrome out of `build.xslt`, swaps the Slate-absolute image
+path for a relative one, and wraps each fragment in `tools/demo/`. **Never edit
+`index.html` or `portal.html` directly** — change `build.xslt` or a demo
+fragment and re-run. Adding a staging page means adding a fragment and one line
+to `PAGES` in the script.
 
 ---
 
@@ -104,13 +118,33 @@ JavaScript, its markup alone is roughly 166KB, and every link in it leads away
 from the form the applicant is in the middle of completing. The Slate header is
 the navy bar with the Baker logo, linking home.
 
-### The content wrapper resizes itself
+### The content column shares the chrome's left gutter
+
+On bakeru.edu the logo and the body copy start on the same left edge. The Slate
+content column does the same: the wrapper is the same container as the header
+and footer, and the reading measure is applied to `#content` inside it rather
+than by centering a narrower box, which would leave content floating off the
+grid the chrome establishes.
+
+Slate's own inline `<style>` sets `#content { padding: 15px }`, which would push
+content 15px off that gutter and make staging differ from production.
+`build.css` overrides it with a more specific selector so every gutter comes
+from the wrapper.
+
+### The content measure resizes itself
 
 Forms, events and decision letters read best at a narrow measure (780px).
 Checklist and portal pages render a floated `#side` / `#main` pair that gets
-cramped at that width, so `build.css` widens the wrapper to 1120px when it
+cramped at that width, so `build.css` widens `#content` to 1120px when it
 detects a sidebar, subtabs or a fixed table, using `:has()`. Browsers without
 `:has()` keep the narrower measure — tighter than ideal, never broken.
+
+### Slate's `:link` rules out-specify component rules
+
+`#content a:link` is more specific than `div#menu ul li a`, so any component
+that needs its own link treatment (subtabs, the portal sidebar) restates its
+selector with `:link` and `:visited`. If a link somewhere comes out underlined
+and navy when it shouldn't, this is why.
 
 ### The reset is deliberately incomplete
 
@@ -135,14 +169,33 @@ preferences and a screen-reader utility. Resist the urge to "finish" it.
 
 ---
 
+## Browser QA
+
+Reviewed by Breon Williams on 2026-09-24, in Chrome against a local server and
+in headless Chromium at phone and tablet widths. Checked and fixed:
+
+- Logo, content and footer all share one left gutter at every width
+- Fieldset default inline margin knocking the form off that gutter
+- Header brand link falling back to default link blue if the logo fails to load
+- Body type set to the site's 18px/30px rhythm; lede at 20px
+- Slate form questions: labels above controls, inputs at a consistent width
+- Portal sidebar styled as a nav rather than a bulleted list
+- `#side` / `#main` stack below 900px, where the 22% sidebar wraps labels
+- Keyboard focus ring visible on both white and navy, with a `:focus` fallback
+- Footer list links and radio/checkbox targets meet the 24px minimum
+- No horizontal overflow at 375, 390, 820, 1024, 1440
+- Contrast: every text pair 12.6:1 or better
+
 ## Status and next steps
 
-- [x] Staging page, `build.css`, `build-fonts.css`, `build.xslt`
-- [ ] Add `images/logo-baker.svg` (see `images/README.md`)
+- [x] Staging pages, `build.css`, `build-fonts.css`, `build.xslt`
+- [x] `images/logo-baker.svg` in place
+- [x] Browser QA pass
 - [ ] Drop Baker's current Slate files into `reference/` and reconcile — the
       Slate UI overrides in `build.css` section 6 came from a known-good
       implementation, not from Baker's own instance
 - [ ] Publish staging for client review
+- [ ] Upload the logo into Slate at `/images/logo-baker.svg`
 - [ ] Deploy to Slate (`shared/README.md`)
 
 ---

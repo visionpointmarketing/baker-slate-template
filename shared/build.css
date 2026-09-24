@@ -70,14 +70,15 @@
     --fz-h1:        2.25rem;     /* 36px */
     --fz-h2:        1.75rem;     /* 28px */
     --fz-h3:        1.25rem;     /* 20px */
-    --fz-body:      1rem;        /* 16px */
-    --fz-ui:        1.125rem;    /* 18px — the site's nav/link size */
+    --fz-body:      1.125rem;    /* 18px — the site's body size */
+    --fz-ui:        1rem;        /* 16px — footer links, utility text */
+    --fz-lede:      1.25rem;     /* 20px — intro paragraph under a page title */
     --fz-small:     0.875rem;    /* 14px */
     --fz-legal:     0.8125rem;   /* 13px */
 
     --lh-tight:     1.15;
     --lh-snug:      1.35;
-    --lh-normal:    1.6;
+    --lh-normal:    1.667;   /* 30px on 18px, as the site sets it */
 
     --letter-spacing-label: 0.06em;
 
@@ -180,7 +181,26 @@ svg {
     left: 0;
 }
 
-/* One visible focus treatment for everything, including Slate's own controls. */
+/* One visible focus treatment for everything, including Slate's own controls.
+   The :focus rule is the fallback; :focus-visible then removes the ring for
+   mouse users in browsers that support it. */
+a:focus,
+button:focus,
+input:focus,
+select:focus,
+textarea:focus {
+    outline: 3px solid var(--color-orange);
+    outline-offset: 2px;
+}
+
+a:focus:not(:focus-visible),
+button:focus:not(:focus-visible),
+input:focus:not(:focus-visible),
+select:focus:not(:focus-visible),
+textarea:focus:not(:focus-visible) {
+    outline: none;
+}
+
 a:focus-visible,
 button:focus-visible,
 input:focus-visible,
@@ -188,6 +208,13 @@ select:focus-visible,
 textarea:focus-visible {
     outline: 3px solid var(--color-orange);
     outline-offset: 2px;
+}
+
+/* On navy, orange does not separate from the background enough — use white
+   with an orange inner edge so the ring reads on either surface. */
+.site-header a:focus-visible,
+.site-footer a:focus-visible {
+    outline-color: var(--color-white);
 }
 
 
@@ -256,7 +283,8 @@ body {
 @media (min-width: 1024px) {
     .container,
     .site-header__inner,
-    .site-footer__inner {
+    .site-footer__inner,
+    .slate-form-area__inner {
         padding-inline: var(--content-pad-x-lg);
     }
 }
@@ -267,17 +295,31 @@ body {
     min-height: 55vh;
 }
 
-.slate-form-area__inner {
+/* The wrapper is the same container as the header and footer, so Slate content
+   starts on the same left gutter as the logo — which is how bakeru.edu lines up
+   its own interior pages. The reading measure is applied to #content inside it
+   rather than by centering a narrower wrapper, which would leave the content
+   floating off the chrome's grid. */
+
+/* Slate's own inline <style> in build.xslt sets #content { padding: 15px }.
+   Rather than fight it, override it deterministically so all gutters come from
+   the wrapper and staging matches production to the pixel. */
+.slate-form-area #content {
+    padding: 0;
+}
+
+.slate-form-area__heading,
+.slate-form-area #content {
     max-width: var(--max-width-form);
 }
 
-/* Checklist and portal pages render a #side / #main two-column layout. At the
-   form measure they get cramped, so widen the wrapper when Slate has put a
-   sidebar on the page. Browsers without :has() simply keep the form width —
-   narrower than ideal, never broken. */
-.slate-form-area__inner:has(#side),
-.slate-form-area__inner:has(ul.subtabs),
-.slate-form-area__inner:has(table.fixed) {
+/* Checklist and portal pages render a #side / #main two-column layout, subtabs
+   or a fixed table. At the form measure those get cramped, so widen when one is
+   present. Browsers without :has() keep the form measure — tighter than ideal,
+   never broken. */
+.slate-form-area #content:has(#side),
+.slate-form-area #content:has(ul.subtabs),
+.slate-form-area #content:has(table.fixed) {
     max-width: var(--max-width-wide);
 }
 
@@ -287,9 +329,10 @@ body {
 
 .slate-form-area__lede {
     color: var(--color-text-body);
-    font-size: var(--fz-ui);
-    line-height: var(--lh-normal);
+    font-size: var(--fz-lede);
+    line-height: var(--lh-snug);
     margin-top: var(--space-xs);
+    max-width: 62ch;
 }
 
 
@@ -312,6 +355,16 @@ body {
     align-items: center;
     justify-content: flex-start;
     min-height: var(--header-height);
+}
+
+/* The brand link wraps only an image, so it normally shows no text — but if
+   the logo ever fails to load, the alt text must still be legible on navy
+   rather than falling back to the browser's default link blue. */
+.site-header a,
+.site-header a:link,
+.site-header a:visited {
+    color: var(--color-text-on-dark);
+    text-decoration: none;
 }
 
 .site-header__brand {
@@ -352,14 +405,17 @@ body {
 .site-footer {
     background-color: var(--color-bg-footer);
     color: var(--color-text-on-dark);
-    font-size: var(--fz-body);
+    font-size: var(--fz-ui);
+    line-height: var(--lh-snug);
 }
 
 .site-footer__inner {
     padding-block: var(--space-xl) var(--space-lg);
 }
 
-.site-footer a {
+.site-footer a,
+.site-footer a:link,
+.site-footer a:visited {
     color: var(--color-text-on-dark);
     text-decoration: none;
 }
@@ -392,7 +448,7 @@ body {
 
 .site-footer__social-label {
     margin: var(--space-md) 0 var(--space-xs);
-    font-size: var(--fz-body);
+    font-size: var(--fz-ui);
 }
 
 .site-footer__social ul {
@@ -465,6 +521,15 @@ body {
 
 .site-footer__utility a {
     font-weight: 700;
+}
+
+/* List links are discrete targets, not inline prose, so give them enough
+   height to satisfy WCAG 2.5.8 (24px minimum) on touch screens. */
+.site-footer__utility a,
+.site-footer__legal a,
+.site-footer__contact a {
+    display: inline-block;
+    padding-block: 4px;
 }
 
 /* ---- Statement + legal ---- */
@@ -584,7 +649,20 @@ body {
 }
 
 #content li.cr {
-    margin-bottom: var(--space-2xs);
+    display: flex;
+    align-items: center;
+    gap: var(--space-2xs);
+    min-height: 32px;
+}
+
+/* Native radios and checkboxes render at 13px; scale them up so the control
+   itself is a reasonable target, not just its label. */
+#content .form_question input[type=radio],
+#content .form_question input[type=checkbox] {
+    width: 1.125rem;
+    height: 1.125rem;
+    margin: 0;
+    accent-color: var(--color-navy);
 }
 
 /* Subtabs are a horizontal row of pills, not a bulleted list. */
@@ -648,6 +726,37 @@ input:not([type]) {
     font-size: 100%;
 }
 
+/* Slate's form questions put the label inline with the control, which leaves a
+   ragged column of inputs at different left edges. Stacking the label above the
+   field lines every control up and gives the labels room to wrap on a phone. */
+#content .form_question {
+    margin-bottom: var(--space-sm);
+}
+
+#content .form_question > label {
+    display: block;
+    margin-bottom: var(--space-2xs);
+}
+
+/* Radio and checkbox options keep their inline label — the control belongs
+   beside its text, not above it. */
+#content .form_question li.cr > label,
+#content .form_question label.inline {
+    display: inline;
+    margin-bottom: 0;
+}
+
+#content .form_question input[type=text],
+#content .form_question input[type=password],
+#content .form_question input[type=email],
+#content .form_question input[type=tel],
+#content .form_question input:not([type]),
+#content .form_question textarea,
+#content .form_question select {
+    width: 100%;
+    max-width: 32rem;
+}
+
 #content input[type=text],
 #content input[type=password],
 #content input[type=email],
@@ -687,7 +796,9 @@ input:not([type]) {
     border: 1px solid var(--color-border-soft);
     border-radius: var(--radius-sm);
     padding: var(--space-md);
-    margin-bottom: var(--space-md);
+    /* Browsers give fieldset a default 2px inline margin, which knocks it off
+       the left gutter the heading and chrome share. */
+    margin: 0 0 var(--space-md);
 }
 
 /* Buttons — the site's pill treatment: navy fill, white label. */
@@ -756,8 +867,11 @@ ul.tabs li a {
     padding-bottom: 20px;
 }
 
-#content ul.subtabs li a {
+#content ul.subtabs li a,
+#content ul.subtabs li a:link,
+#content ul.subtabs li a:visited {
     font-size: var(--fz-small);
+    color: var(--color-link);
     padding: 10px;
     border: 1px solid var(--color-border-soft);
     box-shadow: 0.5px 0.5px 1px var(--color-border-soft);
@@ -791,20 +905,66 @@ div#menu {
     width: auto;
 }
 
+div#menu {
+    padding-right: var(--space-md);
+}
+
+div#menu ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+div#menu ul li {
+    margin-bottom: var(--space-2xs);
+}
+
+#content div#menu ul li a,
+#content div#menu ul li a:link,
+#content div#menu ul li a:visited {
+    color: var(--color-link);
+    text-decoration: none;
+}
+
 div#menu ul li a {
+    display: block;
     width: 100%;
     min-width: 100px;
-    padding: 3px 0 5px 1px;
+    padding: 8px 12px;
+    border-left: 3px solid transparent;
+    font-size: var(--fz-ui);
+    font-weight: 500;
     overflow-wrap: break-word;
+    text-decoration: none;
+}
+
+#content div#menu ul li a:hover,
+#content div#menu ul li a:focus-visible {
+    background-color: var(--color-light-navy);
+    border-left-color: var(--color-orange);
+    text-decoration: none;
+}
+
+#content div#menu ul li a.selected {
+    background-color: var(--color-light-navy);
+    border-left-color: var(--color-navy);
+    color: var(--color-navy);
+    font-weight: 700;
 }
 
 /* Slate's #side/#main are floated at fixed percentages; stack them on small
    screens so checklist pages stay usable on a phone. */
-@media only screen and (max-width: 767px) {
+/* Below 900px the 22% sidebar is too narrow for Slate's menu labels, which
+   wrap to three lines. Stack instead. */
+@media only screen and (max-width: 899px) {
     #side,
     #main {
         width: 100%;
         float: none;
+    }
+    div#menu {
+        padding-right: 0;
+        margin-bottom: var(--space-md);
     }
 }
 

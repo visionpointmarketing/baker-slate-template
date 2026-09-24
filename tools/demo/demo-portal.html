@@ -1,0 +1,45 @@
+<!-- DEMO CONTENT — staging only, never shipped. Reproduces the markup Slate
+     renders for a checklist / portal page: subtabs, a fixed status table, and
+     the floated #side / #main pair. -->
+
+<div class="slate-form-area__heading">
+    <h1>Application Status</h1>
+    <p class="slate-form-area__lede">Track your materials and complete the remaining steps.</p>
+</div>
+
+<ul class="subtabs">
+    <li class="selected"><a class="selected" href="#">Application</a></li>
+    <li><a href="#">Financial Aid</a></li>
+    <li><a href="#">Housing</a></li>
+</ul>
+
+<div id="side">
+    <div id="menu">
+        <ul>
+            <li><a href="#">Status</a></li>
+            <li><a href="#">Upload materials</a></li>
+            <li><a href="#">Visit campus</a></li>
+            <li><a href="#">Update my information</a></li>
+        </ul>
+    </div>
+</div>
+
+<div id="main">
+    <h2>Your checklist</h2>
+    <table class="fixed">
+        <colgroup><col><col><col></colgroup>
+        <thead>
+            <tr><th>Item</th><th>Status</th><th>Received</th></tr>
+        </thead>
+        <tbody>
+            <tr><td>Application form</td><td>Complete</td><td>Sep 3, 2026</td></tr>
+            <tr><td>Official transcript</td><td>Awaiting</td><td>&#8212;</td></tr>
+            <tr><td>Letter of recommendation</td><td>Awaiting</td><td>&#8212;</td></tr>
+            <tr><td>Test scores (optional)</td><td>Waived</td><td>&#8212;</td></tr>
+        </tbody>
+    </table>
+
+    <h3>Next step</h3>
+    <p>Ask your counselor to send an <a href="#">official transcript</a>. Most items post within two business days of arriving.</p>
+    <button class="default" type="button">Upload a document</button>
+</div>
