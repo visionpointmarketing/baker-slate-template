@@ -1,0 +1,27 @@
+# OS junk
+.DS_Store
+._*
+Thumbs.db
+
+# Editors / IDEs
+.vscode/
+.idea/
+*.swp
+*~
+
+# Node — for if/when a build pipeline gets added
+node_modules/
+npm-debug.log*
+
+# Build output — reserved for a future bundler
+dist/
+build/
+.cache/
+
+# Environment / secrets — never commit Slate credentials
+.env
+.env.local
+*.local
+
+# Logs
+*.log

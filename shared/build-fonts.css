@@ -1,0 +1,30 @@
+/* ============================================================================
+   build-fonts.css — Baker University Slate font declarations
+   ----------------------------------------------------------------------------
+   Newsreader and Roboto load from Google Fonts via <link> in build.xslt, so
+   they need no @font-face declarations here. Both are the faces named in
+   Baker's brand guidelines, so there is no substitute font to manage.
+
+   This file exists for FontAwesome, which parts of Slate's own UI reference by
+   family name. The declaration points at the path Slate's framework expects.
+
+   VERIFY BEFORE DEPLOY: diff this against Baker's current build-fonts.css in
+   /reference. If their instance declares anything else, carry it forward.
+
+   To self-host Newsreader or Roboto later:
+     1. Upload the .woff2 files at Database -> Configurations -> Files
+        (suggested path /fonts/).
+     2. Add @font-face declarations here pointing at those paths.
+     3. Remove the fonts.googleapis.com <link> from build.xslt.
+   ============================================================================ */
+
+@font-face {
+    font-family: FontAwesome;
+    src: url(/fonts/fontawesome-webfont.eot?#iefix) format("embedded-opentype"),
+         url(/fonts/fontawesome-webfont.woff2?v=4.4.0) format("woff2"),
+         url(/fonts/fontawesome-webfont.woff?v=4.4.0) format("woff"),
+         url(/fonts/fontawesome-webfont.ttf?v=4.4.0) format("truetype"),
+         url(/fonts/fontawesome-webfont.svg?v=4.4.0#fontawesomeregular) format("svg");
+    font-weight: normal;
+    font-style: normal;
+}

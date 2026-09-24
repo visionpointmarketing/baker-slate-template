@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Slate Branding Preview | Baker University</title>
+    <meta name="description" content="Staging preview of Baker University's Slate branding.">
+    <meta name="robots" content="noindex,nofollow">
+
+    <!-- Google Fonts: Newsreader (headings) + Roboto (body/UI). Same families
+         and weights requested in shared/build.xslt. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,300;1,6..72,400&family=Roboto:wght@300;400;500;700&display=swap">
+
+    <!-- The SAME stylesheet that ships to Slate. Not a staging copy of it —
+         see README.md, "One stylesheet, two environments". -->
+    <link rel="stylesheet" href="shared/build.css">
+</head>
+<body>
+
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+
+<header class="site-header" role="banner">
+      <div class="site-header__inner">
+        <a class="site-header__brand" href="https://www.bakeru.edu/" aria-label="Baker University home">
+          <img class="site-header__logo" src="images/logo-baker.svg" alt="Baker University" width="132" height="52" />
+        </a>
+      </div>
+    </header>
+
+    <main id="main-content" class="slate-form-area" role="main">
+        <div class="slate-form-area__inner">
+            <div id="global"></div>
+            <div id="content">
+
+            <!-- ==================================================================
+                 DEMO CONTENT — staging only. None of this ships in build.xslt.
+                 It reproduces the markup Slate actually renders (form_question,
+                 subtabs, table.fixed, #side/#main) so the client reviews something
+                 realistic and so the Slate UI overrides in build.css section 6 can
+                 be checked before anything is pasted into the Branding Editor.
+                 ================================================================== -->
+
+            <div class="slate-form-area__heading">
+                <h1>Request Information</h1>
+                <p class="slate-form-area__lede">Tell us a little about yourself and an admissions counselor will be in touch.</p>
+            </div>
+
+            <form class="default" action="#" onsubmit="return false;">
+                <fieldset>
+                    <legend>About you</legend>
+                    <div class="form_question form_text">
+                        <label for="d_first">First name <span class="required">*</span></label>
+                        <input type="text" id="d_first" name="first" size="30">
+                    </div>
+                    <div class="form_question form_text">
+                        <label for="d_last">Last name <span class="required">*</span></label>
+                        <input type="text" id="d_last" name="last" size="30">
+                    </div>
+                    <div class="form_question form_email">
+                        <label for="d_email">Email <span class="required">*</span></label>
+                        <input type="email" id="d_email" name="email" size="30">
+                    </div>
+                    <div class="form_question form_phone">
+                        <label for="d_phone">Phone</label>
+                        <input type="tel" id="d_phone" name="phone" size="20">
+                    </div>
+                </fieldset>
+
+                <fieldset>
+                    <legend>Your interests</legend>
+                    <div class="form_question form_select">
+                        <label for="d_program">Program of interest</label>
+                        <select id="d_program" name="program">
+                            <option>Select a program</option>
+                            <option>Business</option>
+                            <option>Computer Science &amp; Technology</option>
+                            <option>Education</option>
+                            <option>Nursing</option>
+                        </select>
+                    </div>
+                    <div class="form_question form_radio">
+                        <label>Start term</label>
+                        <ul class="cr">
+                            <li class="cr"><input type="radio" id="d_t1" name="term"> <label for="d_t1">Fall 2027</label></li>
+                            <li class="cr"><input type="radio" id="d_t2" name="term"> <label for="d_t2">Spring 2028</label></li>
+                        </ul>
+                    </div>
+                    <div class="form_question form_textarea">
+                        <label for="d_notes">Anything we should know?</label>
+                        <textarea id="d_notes" name="notes" rows="4" cols="40"></textarea>
+                    </div>
+                    <p><a href="#">A link inside Slate content</a> renders navy and underlined.</p>
+                    <button class="default" type="button">Submit</button>
+                </fieldset>
+            </form>
+
+            <h2>Application checklist</h2>
+            <ul class="subtabs">
+                <li class="selected"><a class="selected" href="#">Application</a></li>
+                <li><a href="#">Financial Aid</a></li>
+                <li><a href="#">Housing</a></li>
+            </ul>
+
+            <table class="fixed">
+                <colgroup><col><col><col></colgroup>
+                <thead>
+                    <tr><th>Item</th><th>Status</th><th>Received</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Application form</td><td>Complete</td><td>Sep 3, 2026</td></tr>
+                    <tr><td>Official transcript</td><td>Awaiting</td><td>&#8212;</td></tr>
+                    <tr><td>Letter of recommendation</td><td>Awaiting</td><td>&#8212;</td></tr>
+                </tbody>
+            </table>
+
+            <h2>Portal page with a sidebar</h2>
+            <div id="side">
+                <div id="menu">
+                    <ul>
+                        <li><a href="#">Status</a></li>
+                        <li><a href="#">Upload materials</a></li>
+                        <li><a href="#">Visit campus</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div id="main">
+                <p>Slate renders checklist and portal pages as a floated <code>#side</code> / <code>#main</code> pair. The content wrapper widens automatically when one is present, and the columns stack below 768px.</p>
+            </div>
+
+            </div>
+        </div>
+    </main>
+
+<footer class="site-footer" id="fsFooter" role="contentinfo">
+      <div class="site-footer__inner">
+
+        <div class="site-footer__top">
+
+          <div class="site-footer__brand-col">
+            <a class="site-footer__brand" href="https://www.bakeru.edu/" aria-label="Baker University home">
+              <img class="site-footer__logo" src="images/logo-baker.svg" alt="Baker University" width="132" height="52" />
+            </a>
+            <p class="site-footer__social-label">Connect with us:</p>
+            <nav class="site-footer__social" aria-label="Social media">
+              <ul>
+                <li>
+                  <a href="https://www.facebook.com/BakerUniversity/" target="_blank" rel="noopener" aria-label="Baker University on Facebook (opens in a new window)">
+                    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" width="20" height="20" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M13.5 21v-8h2.7l.4-3.1h-3.1V7.9c0-.9.3-1.5 1.6-1.5h1.7V3.6c-.3 0-1.3-.1-2.5-.1-2.5 0-4.2 1.5-4.2 4.3v2.4H7.4V13h2.7v8h3.4z" /></svg>
+                  </a>
+                </li>
+                <li>
+                  <a href="https://www.instagram.com/bakeruniversity/" target="_blank" rel="noopener" aria-label="Baker University on Instagram (opens in a new window)">
+                    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" width="20" height="20" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M12 4.5c2.4 0 2.7 0 3.7.1 1 0 1.5.2 1.9.4.5.2.8.4 1.2.8.4.4.6.7.8 1.2.2.4.3.9.4 1.9 0 1 .1 1.3.1 3.7s0 2.7-.1 3.7c0 1-.2 1.5-.4 1.9-.2.5-.4.8-.8 1.2-.4.4-.7.6-1.2.8-.4.2-.9.3-1.9.4-1 0-1.3.1-3.7.1s-2.7 0-3.7-.1c-1 0-1.5-.2-1.9-.4-.5-.2-.8-.4-1.2-.8-.4-.4-.6-.7-.8-1.2-.2-.4-.3-.9-.4-1.9 0-1-.1-1.3-.1-3.7s0-2.7.1-3.7c0-1 .2-1.5.4-1.9.2-.5.4-.8.8-1.2.4-.4.7-.6 1.2-.8.4-.2.9-.3 1.9-.4 1 0 1.3-.1 3.7-.1M12 3c-2.4 0-2.8 0-3.7.1-1 0-1.6.2-2.2.4-.6.2-1.2.6-1.7 1.1S3.7 5.7 3.5 6.3c-.2.6-.4 1.2-.4 2.2C3 9.4 3 9.7 3 12s0 2.6.1 3.6c0 1 .2 1.6.4 2.2.2.6.6 1.2 1.1 1.7s1 .9 1.7 1.1c.6.2 1.2.4 2.2.4 1 .1 1.3.1 3.6.1s2.7 0 3.7-.1c1 0 1.6-.2 2.2-.4.6-.2 1.2-.6 1.7-1.1s.9-1 1.1-1.7c.2-.6.4-1.2.4-2.2 0-1 .1-1.3.1-3.6s0-2.6-.1-3.7c0-1-.2-1.6-.4-2.2-.2-.6-.6-1.2-1.1-1.7s-1-.9-1.7-1.1c-.6-.2-1.2-.4-2.2-.4C14.6 3 14.3 3 12 3zm0 4.4c-2.5 0-4.6 2-4.6 4.6s2 4.6 4.6 4.6 4.6-2 4.6-4.6-2.1-4.6-4.6-4.6zm0 7.6c-1.7 0-3-1.3-3-3s1.3-3 3-3 3 1.3 3 3-1.3 3-3 3zm4.8-8.9c-.6 0-1.1.5-1.1 1.1s.5 1.1 1.1 1.1 1.1-.5 1.1-1.1c-.1-.6-.5-1.1-1.1-1.1z" /></svg>
+                  </a>
+                </li>
+                <li>
+                  <a href="https://www.linkedin.com/school/baker-university/" target="_blank" rel="noopener" aria-label="Baker University on LinkedIn (opens in a new window)">
+                    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" width="20" height="20" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M6.94 5.5a1.94 1.94 0 1 1-3.88 0 1.94 1.94 0 0 1 3.88 0zM7 8.48H3V21h4V8.48zm6.32 0H9.34V21h3.94v-6.57c0-3.66 4.77-4 4.77 0V21H22v-7.93c0-6.17-7.06-5.94-8.72-2.91l.04-1.68z" /></svg>
+                  </a>
+                </li>
+                <li>
+                  <a href="https://www.youtube.com/channel/UChKbAy2Vp01oiNcTcpHyY4g" target="_blank" rel="noopener" aria-label="Baker University on YouTube (opens in a new window)">
+                    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" width="20" height="20" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M23 12s0-3.2-.4-4.7a3 3 0 0 0-2.1-2.1C18.9 4.7 12 4.7 12 4.7s-6.9 0-8.5.5a3 3 0 0 0-2.1 2.1C1 8.8 1 12 1 12s0 3.2.4 4.7a3 3 0 0 0 2.1 2.1c1.6.5 8.5.5 8.5.5s6.9 0 8.5-.5a3 3 0 0 0 2.1-2.1c.4-1.5.4-4.7.4-4.7zM9.8 15.2V8.8l5.7 3.2-5.7 3.2z" /></svg>
+                  </a>
+                </li>
+                <li>
+                  <a href="https://www.tiktok.com/@bakeruniversity" target="_blank" rel="noopener" aria-label="Baker University on TikTok (opens in a new window)">
+                    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" width="20" height="20" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M16.6 5.8a4.8 4.8 0 0 1-1.1-3.1h-3v12.2a2.6 2.6 0 1 1-1.8-2.5v-3a5.6 5.6 0 1 0 4.8 5.5V9.6a7.8 7.8 0 0 0 4.5 1.4V8a4.8 4.8 0 0 1-3.4-2.2z" /></svg>
+                  </a>
+                </li>
+              </ul>
+            </nav>
+          </div>
+
+          <section class="site-footer__contact" aria-label="Contact information">
+            <ul>
+              <li>
+                <span class="site-footer__contact-label">Phone</span>
+                <a href="tel:+17855946451">(785) 594-6451</a>
+              </li>
+              <li>
+                <a href="https://maps.app.goo.gl/aQkYZK3bDLcsYEPbA" target="_blank" rel="noopener">Get Directions<span class="visually-hidden"> (opens in a new window)</span></a>
+              </li>
+            </ul>
+          </section>
+
+          <nav class="site-footer__utility" aria-label="Footer navigation">
+            <ul>
+              <li><a href="https://www.bakeru.edu/campus-safety">Campus Safety &amp; Alerts</a></li>
+              <li><a href="https://www.bakeru.edu/about-baker/careers-baker">Careers</a></li>
+              <li><a href="https://wildcatwearhouse.myshopify.com/" target="_blank" rel="noopener">Wildcat Wearhouse<span class="visually-hidden"> (opens in a new window)</span></a></li>
+              <li><a href="https://www.bakeru.edu/alumni">Alumni</a></li>
+            </ul>
+          </nav>
+
+        </div>
+
+        <p class="site-footer__statement">Baker University prohibits discrimination on the basis of race, color, national origin, sex, religion, age, disability, marital status, veteran status, pregnancy status, sexual orientation, or other status protected by law in the university's programs and activities. Retaliation is also prohibited by university policy.</p>
+
+        <div class="site-footer__bottom">
+          <p class="site-footer__copyright">&#169; Copyright 2026 Baker University</p>
+          <nav class="site-footer__legal" aria-label="Legal">
+            <ul>
+              <li><a href="https://www.bakeru.edu/policies-procedures/title-ix">Title IX</a></li>
+              <li><a href="https://www.bakeru.edu/policies-procedures/privacy-policy">Privacy Policy</a></li>
+              <li><a href="https://www.bakeru.edu/consumer-information">Consumer Information</a></li>
+              <li><a href="https://www.bakeru.edu/policies-procedures/compliance-reporting">Compliance Reporting</a></li>
+              <li><a href="https://www.bakeru.edu/about-baker/accreditations-standards">Accreditation</a></li>
+            </ul>
+          </nav>
+        </div>
+
+      </div>
+    </footer>
+
+</body>
+</html>

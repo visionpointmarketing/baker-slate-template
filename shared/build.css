@@ -1,0 +1,870 @@
+/* ============================================================================
+   build.css — Baker University Slate branding
+   ----------------------------------------------------------------------------
+   This is the production stylesheet pasted into Slate's Branding Editor AND
+   the stylesheet the staging page loads. One file, no flattening step, so the
+   two can never drift apart.
+
+   It contains no image references, which is what makes that possible: the only
+   asset (the logo) is an <img> in the markup, not a CSS background.
+
+   Structure (cascade order):
+     1. Design tokens
+     2. Minimal reset          — deliberately scoped; see the note in that section
+     3. Base typography
+     4. Layout                 — the Slate content region
+     5. Components             — site-header, site-footer
+     6. Slate UI overrides     — elements Slate renders itself
+
+   Retuning brand color, type or spacing means editing tokens in section 1.
+   Everything below reads from them.
+   ============================================================================ */
+
+
+/* ============================================================================
+   1. DESIGN TOKENS
+   ----------------------------------------------------------------------------
+   Colors are sampled from bakeru.edu's computed styles, not from the brand
+   guidelines PDF, because the portal has to read as part of the live site.
+
+   Where they differ (the PDF lists navy #001E42 and Cadmium Orange #F4771D as
+   primary; the site renders navy #212B56 and a lighter orange), the site wins.
+   Both values are recorded here so the difference is a decision, not a bug.
+   ============================================================================ */
+
+:root {
+
+    /* Brand — as the live site renders them */
+    --color-navy:         #212B56;   /* main header bar, footer, primary buttons */
+    --color-navy-dark:    #171F3D;   /* site's utility bar; hover/active surfaces */
+    --color-navy-deep:    #111527;   /* headings, text on light/orange surfaces */
+    --color-orange:       #F6924A;   /* accent fills — pairs with navy-deep text */
+    --color-orange-brand: #F4771D;   /* brand guide Cadmium Orange; accents only  */
+    --color-light-navy:   #EBEEF9;   /* tint surfaces, pill backgrounds */
+    --color-white:        #FFFFFF;
+    --color-off-white:    #FFFCF6;   /* the site's nav text white */
+
+    /* Surfaces & text */
+    --color-text-body:    #333333;
+    --color-text-heading: var(--color-navy-deep);
+    --color-text-on-dark: var(--color-white);
+    --color-link:         var(--color-navy);   /* NOT orange — see note below */
+    --color-bg-page:      var(--color-white);
+    --color-bg-header:    var(--color-navy);
+    --color-bg-footer:    var(--color-navy);
+    --color-divider:      rgba(255, 255, 255, 0.18);
+    --color-border-soft:  rgba(33, 43, 86, 0.17);
+
+    /* Accessibility note on orange:
+       #F4771D on white is about 2.8:1 — it fails WCAG AA for text. Orange is
+       used here as a fill with --color-navy-deep text on top (the pattern the
+       live site uses for its buttons), never as text or a link color. */
+
+    /* Typography — both families are Google Fonts and both match the brand
+       guidelines, so there is no paid-font substitution to manage. */
+    --font-heading: "Newsreader", Georgia, "Times New Roman", serif;
+    --font-body:    "Roboto", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+
+    /* Type scale */
+    --fz-display:   3rem;        /* 48px */
+    --fz-h1:        2.25rem;     /* 36px */
+    --fz-h2:        1.75rem;     /* 28px */
+    --fz-h3:        1.25rem;     /* 20px */
+    --fz-body:      1rem;        /* 16px */
+    --fz-ui:        1.125rem;    /* 18px — the site's nav/link size */
+    --fz-small:     0.875rem;    /* 14px */
+    --fz-legal:     0.8125rem;   /* 13px */
+
+    --lh-tight:     1.15;
+    --lh-snug:      1.35;
+    --lh-normal:    1.6;
+
+    --letter-spacing-label: 0.06em;
+
+    /* Spacing */
+    --space-2xs:  0.25rem;
+    --space-xs:   0.5rem;
+    --space-sm:   1rem;
+    --space-md:   1.5rem;
+    --space-lg:   2.5rem;
+    --space-xl:   4rem;
+    --space-2xl:  5rem;
+
+    /* Layout */
+    --max-width-content:  1280px;
+    --max-width-form:     780px;   /* forms, events, decision letters */
+    --max-width-wide:     1120px;  /* checklist/portal pages with a sidebar */
+    --content-pad-x:      1.25rem;
+    --content-pad-x-lg:   2.5rem;
+
+    --header-height:      96px;
+    --header-height-sm:   72px;
+    --logo-height:        52px;
+    --logo-height-sm:     40px;
+
+    --radius-pill:        9999px;
+    --radius-sm:          4px;
+    --transition-fast:    150ms ease;
+}
+
+
+/* ============================================================================
+   2. MINIMAL RESET (scoped on purpose)
+   ----------------------------------------------------------------------------
+   A full modern reset is too aggressive for Slate. Universal `margin: 0` and
+   `list-style: none` break Slate's own form rendering, checklist and menus,
+   which we do not control and cannot re-style exhaustively. This is the safe
+   subset: box-sizing, media defaults, motion preferences, and a screen-reader
+   utility that doubles as an alias for Slate's own .fsStyleSROnly.
+   ============================================================================ */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+    max-width: 100%;
+    height: auto;
+}
+
+.site-header svg,
+.site-footer svg {
+    display: block;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+.visually-hidden,
+.fsStyleSROnly {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* Keyboard users must be able to jump past the header on every Slate page. */
+.skip-link {
+    position: absolute;
+    left: -9999px;
+    top: 0;
+    z-index: 999;
+    padding: var(--space-xs) var(--space-sm);
+    background-color: var(--color-white);
+    color: var(--color-navy);
+    font-family: var(--font-body);
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.skip-link:focus {
+    left: 0;
+}
+
+/* One visible focus treatment for everything, including Slate's own controls. */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+    outline: 3px solid var(--color-orange);
+    outline-offset: 2px;
+}
+
+
+/* ============================================================================
+   3. BASE TYPOGRAPHY
+   ============================================================================ */
+
+body {
+    margin: 0;
+    background-color: var(--color-bg-page);
+    color: var(--color-text-body);
+    font-family: var(--font-body);
+    font-size: var(--fz-body);
+    line-height: var(--lh-normal);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Headings inside Slate content get the serif treatment, matching the site.
+   Scoped to #content and our own chrome so Slate's UI chrome is left alone. */
+#content h1,
+#content h2,
+#content h3,
+.slate-form-area__heading h1 {
+    font-family: var(--font-heading);
+    color: var(--color-text-heading);
+    font-weight: 400;
+    line-height: var(--lh-tight);
+}
+
+#content h1,
+.slate-form-area__heading h1 {
+    font-size: clamp(2rem, 1.6rem + 1.4vw, var(--fz-h1));
+}
+
+#content h2 {
+    font-size: var(--fz-h2);
+}
+
+#content h3 {
+    font-size: var(--fz-h3);
+}
+
+
+/* ============================================================================
+   4. LAYOUT — the Slate content region
+   ----------------------------------------------------------------------------
+   Slate injects every page it renders (forms, events, portal pages, the
+   application checklist, decision letters) inside #content. This wrapper gives
+   all of them the same width, padding and vertical rhythm.
+
+   build.xslt's inline <style> — which is Slate's own, kept verbatim — also sets
+   #content { padding: 15px }. We layer on top of that rather than fight it.
+   ============================================================================ */
+
+.container,
+.site-header__inner,
+.site-footer__inner,
+.slate-form-area__inner {
+    width: 100%;
+    max-width: var(--max-width-content);
+    margin-inline: auto;
+    padding-inline: var(--content-pad-x);
+}
+
+@media (min-width: 1024px) {
+    .container,
+    .site-header__inner,
+    .site-footer__inner {
+        padding-inline: var(--content-pad-x-lg);
+    }
+}
+
+.slate-form-area {
+    background-color: var(--color-bg-page);
+    padding-block: var(--space-xl);
+    min-height: 55vh;
+}
+
+.slate-form-area__inner {
+    max-width: var(--max-width-form);
+}
+
+/* Checklist and portal pages render a #side / #main two-column layout. At the
+   form measure they get cramped, so widen the wrapper when Slate has put a
+   sidebar on the page. Browsers without :has() simply keep the form width —
+   narrower than ideal, never broken. */
+.slate-form-area__inner:has(#side),
+.slate-form-area__inner:has(ul.subtabs),
+.slate-form-area__inner:has(table.fixed) {
+    max-width: var(--max-width-wide);
+}
+
+.slate-form-area__heading {
+    margin-bottom: var(--space-lg);
+}
+
+.slate-form-area__lede {
+    color: var(--color-text-body);
+    font-size: var(--fz-ui);
+    line-height: var(--lh-normal);
+    margin-top: var(--space-xs);
+}
+
+
+/* ============================================================================
+   5. COMPONENTS — site-header
+   ----------------------------------------------------------------------------
+   Navy bar, logo only. The live site's mega-menu is deliberately not ported:
+   it depends on the site's JavaScript, weighs ~166KB of markup on its own, and
+   every link in it leads away from the form the applicant is in the middle of.
+   ============================================================================ */
+
+.site-header {
+    background-color: var(--color-bg-header);
+    position: relative;
+    z-index: 10;
+}
+
+.site-header__inner {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: var(--header-height);
+}
+
+.site-header__brand {
+    display: inline-flex;
+    align-items: center;
+    line-height: 0;
+    transition: opacity var(--transition-fast);
+}
+
+.site-header__brand:hover,
+.site-header__brand:focus-visible {
+    opacity: 0.8;
+}
+
+.site-header__logo {
+    height: var(--logo-height);
+    width: auto;
+}
+
+@media (max-width: 640px) {
+    .site-header__inner {
+        min-height: var(--header-height-sm);
+    }
+    .site-header__logo {
+        height: var(--logo-height-sm);
+    }
+}
+
+
+/* ============================================================================
+   5. COMPONENTS — site-footer
+   ----------------------------------------------------------------------------
+   Mirrors bakeru.edu's footer: brand + social, contact, utility links, the
+   non-discrimination statement, and a legal row. Flat navy, no background
+   image — which is why this stylesheet has no url() references at all.
+   ============================================================================ */
+
+.site-footer {
+    background-color: var(--color-bg-footer);
+    color: var(--color-text-on-dark);
+    font-size: var(--fz-body);
+}
+
+.site-footer__inner {
+    padding-block: var(--space-xl) var(--space-lg);
+}
+
+.site-footer a {
+    color: var(--color-text-on-dark);
+    text-decoration: none;
+}
+
+/* Text color never changes on hover — white is the only value with reliable
+   contrast on navy. Only the underline changes state. */
+.site-footer a:hover,
+.site-footer a:focus-visible {
+    text-decoration: underline;
+}
+
+.site-footer__top {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: var(--space-lg);
+    align-items: start;
+}
+
+/* ---- Brand + social ---- */
+
+.site-footer__brand {
+    display: inline-flex;
+    line-height: 0;
+}
+
+.site-footer__logo {
+    height: var(--logo-height);
+    width: auto;
+}
+
+.site-footer__social-label {
+    margin: var(--space-md) 0 var(--space-xs);
+    font-size: var(--fz-body);
+}
+
+.site-footer__social ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.site-footer__social a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-pill);
+    color: var(--color-white);
+    transition: background-color var(--transition-fast), color var(--transition-fast);
+}
+
+/* The one place the treatment inverts: the icon is the visual focus, not text,
+   and orange-on-navy-deep clears contrast comfortably. */
+.site-footer__social a:hover,
+.site-footer__social a:focus-visible {
+    background-color: var(--color-orange);
+    color: var(--color-navy-deep);
+    text-decoration: none;
+}
+
+/* ---- Contact ---- */
+
+.site-footer__contact ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-md);
+}
+
+.site-footer__contact li {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-xs);
+}
+
+.site-footer__contact-label {
+    font-weight: 700;
+}
+
+.site-footer__contact a {
+    text-decoration: underline;
+}
+
+.site-footer__contact a:hover,
+.site-footer__contact a:focus-visible {
+    text-decoration: none;
+}
+
+/* ---- Utility links ---- */
+
+.site-footer__utility ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-md);
+}
+
+.site-footer__utility a {
+    font-weight: 700;
+}
+
+/* ---- Statement + legal ---- */
+
+.site-footer__statement {
+    margin: var(--space-xl) 0 var(--space-lg);
+    font-size: var(--fz-small);
+    font-style: italic;
+    line-height: var(--lh-snug);
+    max-width: 90ch;
+}
+
+.site-footer__bottom {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm) var(--space-lg);
+    align-items: center;
+    justify-content: space-between;
+    padding-top: var(--space-md);
+    border-top: 1px solid var(--color-divider);
+}
+
+.site-footer__copyright {
+    margin: 0;
+    font-size: var(--fz-small);
+}
+
+.site-footer__legal ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm) var(--space-md);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-size: var(--fz-small);
+}
+
+.site-footer__legal a {
+    font-weight: 600;
+    text-decoration: underline;
+}
+
+.site-footer__legal a:hover,
+.site-footer__legal a:focus-visible {
+    text-decoration: none;
+}
+
+
+/* ============================================================================
+   6. SLATE UI OVERRIDES
+   ----------------------------------------------------------------------------
+   Rules below style elements Slate renders itself, not our chrome: forms, the
+   application and financial aid checklists, the file uploader, the application
+   menu sidebar, event registration, decision letters.
+
+   Most of these are carried over from the standard Slate build.css and
+   recolored to Baker's navy. They are known fixes for Slate's own markup, so
+   if a future Slate release breaks one, comment it out rather than deleting it
+   — that keeps the history of why it existed.
+
+   IMPORTANT: reconcile this section against Baker's current build.css (in
+   /reference) before handing the files to Charlie. Anything Baker's instance
+   already relies on that is not represented here needs to be carried forward.
+   ============================================================================ */
+
+/* Links inside Slate content. Navy, not orange — orange fails contrast on
+   white at text sizes. */
+#content a,
+#content a:link,
+#content a:visited {
+    color: var(--color-link);
+    text-decoration: underline;
+}
+
+#content a:hover,
+#content a:active,
+#content a:focus-visible {
+    color: var(--color-navy-dark);
+    text-decoration: none;
+}
+
+/* ----------------------------------------------------------------------------
+   Content rhythm and structural helpers.
+
+   Slate ships its own stylesheet that gives #content its vertical rhythm, its
+   horizontal subtab row and the floated #side / #main pair. We restate the
+   structural essentials here for two reasons: the staging page has no Slate
+   stylesheet behind it, so without these the client would review a page that
+   does not resemble the real thing; and if a Slate release changes those
+   defaults, our chrome keeps its shape.
+   ---------------------------------------------------------------------------- */
+
+#content p,
+#content ul:not(.subtabs):not(.cr):not(.tabs),
+#content ol,
+#content table {
+    margin-block: 0 var(--space-md);
+}
+
+#content h2 {
+    margin-block: var(--space-lg) var(--space-sm);
+}
+
+#content h3 {
+    margin-block: var(--space-md) var(--space-xs);
+}
+
+/* Slate marks radio/checkbox lists with .cr and expects them unbulleted. */
+#content ul.cr,
+#content li.cr {
+    list-style: none;
+}
+
+#content ul.cr {
+    margin: 0;
+    padding: 0;
+}
+
+#content li.cr {
+    margin-bottom: var(--space-2xs);
+}
+
+/* Subtabs are a horizontal row of pills, not a bulleted list. */
+#content ul.subtabs,
+#content ul.tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+    list-style: none;
+    margin: 0;
+    padding: 0 0 20px;
+}
+
+/* Readable defaults for Slate's data tables (checklists, decision summaries). */
+#content table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+#content th,
+#content td {
+    padding: var(--space-xs) var(--space-sm);
+    border-bottom: 1px solid var(--color-border-soft);
+    text-align: left;
+    vertical-align: top;
+}
+
+#content thead th {
+    font-weight: 700;
+    color: var(--color-text-heading);
+    border-bottom-width: 2px;
+}
+
+/* Slate floats the portal sidebar; keep that here so staging matches. */
+#side,
+#main {
+    float: left;
+}
+
+#content::after,
+.slate-form-area__inner::after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+/* Slate's form controls inherit inconsistent fonts and sizes from its own
+   stylesheet; normalize them to Baker's body face. */
+input,
+button,
+textarea,
+select,
+optgroup,
+option,
+input[type=password],
+input[type=text],
+input[type=email],
+input[type=tel],
+input:not([type]) {
+    font-family: inherit !important;
+    font-size: 100%;
+}
+
+#content input[type=text],
+#content input[type=password],
+#content input[type=email],
+#content input[type=tel],
+#content input:not([type]),
+#content textarea,
+#content select {
+    padding: 8px 10px;
+    border: 1px solid var(--color-border-soft);
+    border-radius: var(--radius-sm);
+    background-color: var(--color-white);
+    color: var(--color-text-body);
+    max-width: 100%;
+}
+
+/* Slate marks required fields with .required — make that visible, not just
+   conveyed by color. */
+#content .form_question label .required,
+#content .required {
+    color: var(--color-navy-dark);
+    font-weight: 700;
+}
+
+#content .form_label,
+#content .form_question > label {
+    font-weight: 500;
+}
+
+#content legend {
+    max-width: 100%;   /* IE/Edge legend wrapping */
+    font-family: var(--font-heading);
+    font-size: var(--fz-h3);
+    color: var(--color-text-heading);
+}
+
+#content fieldset {
+    border: 1px solid var(--color-border-soft);
+    border-radius: var(--radius-sm);
+    padding: var(--space-md);
+    margin-bottom: var(--space-md);
+}
+
+/* Buttons — the site's pill treatment: navy fill, white label. */
+button.default,
+button[type=button],
+button[type=submit],
+#content input[type=submit] {
+    padding: 10px 28px;
+    border: 0;
+    border-radius: var(--radius-pill);
+    background-color: var(--color-navy);
+    color: var(--color-white);
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color var(--transition-fast);
+}
+
+button.default:hover,
+button[type=button]:hover,
+button[type=submit]:hover,
+#content input[type=submit]:hover {
+    background-color: var(--color-navy-dark);
+}
+
+/* Mobile: Slate's inputs default to fixed pixel widths that overflow. */
+@media screen and (max-width: 600px) {
+    button,
+    textarea,
+    input[type=password],
+    input[type=text],
+    input[type=email],
+    input[type=tel],
+    input:not([type]),
+    div.form_question:not([class*="form_birthdate"]) select {
+        width: 100%;
+    }
+}
+
+/* iOS: stop the mega-wide Slate tables from scrolling the whole page sideways. */
+#page {
+    overflow-x: hidden;
+}
+
+/* Decision-letter confetti canvas sits above page content. */
+body > canvas {
+    z-index: 500;
+}
+
+/* Portfolio / file uploader */
+.plupload_filelist_footer {
+    height: 43px !important;
+}
+
+ul.tabs li a {
+    height: 30px;
+    font-size: var(--fz-small);
+}
+
+.slide {
+    height: auto !important;
+    width: auto !important;
+}
+
+/* Application and Financial Aid checklist subtabs */
+#content ul.subtabs {
+    padding-bottom: 20px;
+}
+
+#content ul.subtabs li a {
+    font-size: var(--fz-small);
+    padding: 10px;
+    border: 1px solid var(--color-border-soft);
+    box-shadow: 0.5px 0.5px 1px var(--color-border-soft);
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+}
+
+#content ul.subtabs li a.selected {
+    background-color: var(--color-navy) !important;
+    color: var(--color-white) !important;
+}
+
+#content ul.subtabs li.selected a:hover {
+    background-color: var(--color-navy-dark) !important;
+    color: var(--color-white) !important;
+    box-shadow: 0 5px 20px 5px rgba(0, 0, 0, 0.25);
+    transition: all 170ms;
+}
+
+/* Application menu sidebar */
+#side {
+    width: 22%;
+    box-sizing: border-box;
+}
+
+#main {
+    width: 78%;
+}
+
+div#menu {
+    width: auto;
+}
+
+div#menu ul li a {
+    width: 100%;
+    min-width: 100px;
+    padding: 3px 0 5px 1px;
+    overflow-wrap: break-word;
+}
+
+/* Slate's #side/#main are floated at fixed percentages; stack them on small
+   screens so checklist pages stay usable on a phone. */
+@media only screen and (max-width: 767px) {
+    #side,
+    #main {
+        width: 100%;
+        float: none;
+    }
+}
+
+/* Tables: Slate uses table.fixed with colgroups that do not reflow.
+
+   The stock Slate fix stacks every cell into its own block row. That stops the
+   overflow, but Slate's markup carries no per-cell labels, so a checklist
+   collapses into an unlabelled run of values. Scrolling the table instead keeps
+   each value under its column heading. Swap the two blocks if a client ever
+   prefers the stacked behavior. */
+@media only screen and (max-width: 480px) {
+    #content table.fixed {
+        display: block;
+        width: 100% !important;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    #content table.fixed > colgroup > col {
+        display: none;
+    }
+    #content table.fixed th,
+    #content table.fixed td {
+        white-space: nowrap;
+    }
+}
+
+/* Older event landing pages */
+@media only screen and (min-width: 768px) {
+    .register_datepicker_container {
+        flex-direction: column-reverse !important;
+        flex-wrap: wrap-reverse;
+        width: 65%;
+    }
+    #register_events {
+        width: 80% !important;
+        margin: auto;
+        padding-top: 25px;
+    }
+    .register_datepicker_sidebar {
+        width: 80% !important;
+        margin: auto;
+    }
+    #elp-txt_wrapper {
+        float: left;
+        width: 35%;
+    }
+}
+
+/* Print: drop the chrome, keep the content (applicants print checklists and
+   decision letters). */
+@media print {
+    .site-header,
+    .site-footer,
+    .skip-link {
+        display: none !important;
+    }
+    .slate-form-area {
+        padding-block: 0;
+    }
+    .slate-form-area__inner {
+        max-width: none;
+    }
+}
