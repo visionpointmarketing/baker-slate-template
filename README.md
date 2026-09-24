@@ -24,6 +24,22 @@ python3 -m http.server 8000
 Opening `index.html` directly off the filesystem also works; a server is only
 needed if you want paths to behave exactly as they do in Slate.
 
+## Review URL
+
+The staging pages are published with GitHub Pages from `main`:
+
+- Form page: <https://visionpointmarketing.github.io/baker-slate-template/>
+- Portal page: <https://visionpointmarketing.github.io/baker-slate-template/portal.html>
+
+Pushing to `main` republishes within a minute or so. A small review bar at the
+top of each staging page links between the two layouts; it is injected by
+`tools/make-staging.py` with its own inline styles and never reaches Slate.
+
+Every asset path in the staging pages is relative, which is what lets them work
+under the `/baker-slate-template/` sub-path a project Pages site serves from.
+Do not switch them to root-relative paths — that works locally and breaks on
+Pages. `.nojekyll` is committed so Pages serves the files as they are.
+
 ---
 
 ## Folder structure

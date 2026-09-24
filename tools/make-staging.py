@@ -23,6 +23,45 @@ PAGES = {
                     "Staging preview of Baker University's Slate branding — portal page."),
 }
 
+# The review bar exists only on the staging pages, so reviewers can move between
+# the two layouts. It is injected here with its own inline styles rather than
+# living in build.css or build.xslt, so it cannot leak into what ships to Slate.
+REVIEW_BAR_CSS = """
+    <style>
+        .preview-bar {
+            font: 500 14px/1.4 system-ui, -apple-system, "Segoe UI", sans-serif;
+            background: #EBEEF9;
+            color: #171F3D;
+            padding: 10px 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px 20px;
+            align-items: center;
+            border-bottom: 1px solid rgba(23, 31, 61, 0.15);
+        }
+        .preview-bar strong { font-weight: 700; }
+        .preview-bar nav { display: flex; flex-wrap: wrap; gap: 8px 16px; }
+        .preview-bar a { color: #212B56; padding: 4px 0; }
+        .preview-bar a[aria-current] { text-decoration: none; font-weight: 700; }
+        @media print { .preview-bar { display: none; } }
+    </style>"""
+
+
+def review_bar(current):
+    links = []
+    for href, label in (("index.html", "Form page"), ("portal.html", "Portal page")):
+        mark = ' aria-current="page"' if href == current else ""
+        links.append(f'<a href="{href}"{mark}>{label}</a>')
+    joined = "\n                ".join(links)
+    return f"""    <div class="preview-bar">
+        <strong>Staging preview</strong>
+        <span>Slate branding for Baker University &mdash; not a live Slate page.</span>
+        <nav aria-label="Preview pages">
+                {joined}
+        </nav>
+    </div>
+"""
+
 FONTS = ('https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@'
          '0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,300;1,6..72,400'
          '&family=Roboto:wght@300;400;500;700&display=swap')
@@ -56,6 +95,7 @@ def build(out, fragment, title, description):
 
     <!-- The SAME stylesheet that ships to Slate, not a staging copy of it. -->
     <link rel="stylesheet" href="shared/build.css">
+{REVIEW_BAR_CSS}
 </head>
 <body>
 
@@ -64,6 +104,7 @@ def build(out, fragment, title, description):
 
     <a class="skip-link" href="#main-content">Skip to main content</a>
 
+{review_bar(out)}
 {lift('header')}
 
     <main id="main-content" class="slate-form-area" role="main">

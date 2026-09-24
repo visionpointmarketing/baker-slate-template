@@ -15,6 +15,25 @@
 
     <!-- The SAME stylesheet that ships to Slate, not a staging copy of it. -->
     <link rel="stylesheet" href="shared/build.css">
+
+    <style>
+        .preview-bar {
+            font: 500 14px/1.4 system-ui, -apple-system, "Segoe UI", sans-serif;
+            background: #EBEEF9;
+            color: #171F3D;
+            padding: 10px 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px 20px;
+            align-items: center;
+            border-bottom: 1px solid rgba(23, 31, 61, 0.15);
+        }
+        .preview-bar strong { font-weight: 700; }
+        .preview-bar nav { display: flex; flex-wrap: wrap; gap: 8px 16px; }
+        .preview-bar a { color: #212B56; padding: 4px 0; }
+        .preview-bar a[aria-current] { text-decoration: none; font-weight: 700; }
+        @media print { .preview-bar { display: none; } }
+    </style>
 </head>
 <body>
 
@@ -22,6 +41,15 @@
          tools/demo/demo-form.html, then re-run the script. -->
 
     <a class="skip-link" href="#main-content">Skip to main content</a>
+
+    <div class="preview-bar">
+        <strong>Staging preview</strong>
+        <span>Slate branding for Baker University &mdash; not a live Slate page.</span>
+        <nav aria-label="Preview pages">
+                <a href="index.html" aria-current="page">Form page</a>
+                <a href="portal.html">Portal page</a>
+        </nav>
+    </div>
 
 <header class="site-header" role="banner">
       <div class="site-header__inner">
