@@ -28,10 +28,15 @@ needed if you want paths to behave exactly as they do in Slate.
 
 The staging pages are published with GitHub Pages from `main`:
 
-| | Navy (default) | Orange (alternate) |
+Four chrome treatments, each in both layouts. A bar at the top of every page
+links between them.
+
+| Treatment | Form page | Portal page |
 | --- | --- | --- |
-| Form | [index.html](https://visionpointmarketing.github.io/baker-slate-template/) | [index-orange.html](https://visionpointmarketing.github.io/baker-slate-template/index-orange.html) |
-| Portal | [portal.html](https://visionpointmarketing.github.io/baker-slate-template/portal.html) | [portal-orange.html](https://visionpointmarketing.github.io/baker-slate-template/portal-orange.html) |
+| Navy | [index.html](https://visionpointmarketing.github.io/baker-slate-template/) | [portal.html](https://visionpointmarketing.github.io/baker-slate-template/portal.html) |
+| All orange | [index-orange.html](https://visionpointmarketing.github.io/baker-slate-template/index-orange.html) | [portal-orange.html](https://visionpointmarketing.github.io/baker-slate-template/portal-orange.html) |
+| Orange header, navy footer | [index-orange-header.html](https://visionpointmarketing.github.io/baker-slate-template/index-orange-header.html) | [portal-orange-header.html](https://visionpointmarketing.github.io/baker-slate-template/portal-orange-header.html) |
+| Navy header, orange footer | [index-orange-footer.html](https://visionpointmarketing.github.io/baker-slate-template/index-orange-footer.html) | [portal-orange-footer.html](https://visionpointmarketing.github.io/baker-slate-template/portal-orange-footer.html) |
 
 Pushing to `main` republishes within a minute or so. A small review bar at the
 top of each staging page links between the two layouts; it is injected by
@@ -112,30 +117,48 @@ to `PAGES` in the script.
 
 ## Design decisions worth knowing
 
-### Two themes, one stylesheet
+### Four treatments, one stylesheet
 
-The orange treatment is not a second stylesheet or a fork. `build.css` section 7
-overrides tokens under a `.theme-orange` body class; every component rule stays
-as it is. That is what the token layer in section 1 was for.
+None of the orange treatments is a fork. `build.css` section 7 defines three
+independent switches that only move tokens — every component rule above them is
+untouched:
 
-Shipping whichever theme the client picks means two edits to `build.xslt`:
+| Class | What it changes |
+| --- | --- |
+| `chrome-header-orange` | header band to orange, its text to dark navy |
+| `chrome-footer-orange` | footer band to orange, its text to dark navy |
+| `accent-orange` | content accents: primary button, selected subtab, sidebar rule |
 
-- navy — nothing; it's the default
-- orange — add `class="theme-orange"` to `<body>`
+A treatment is a class list on `<body>`, so shipping whichever one the client
+picks is one attribute in `build.xslt`:
 
-Nothing else changes, and `build.css` ships the same either way.
+| Treatment | `<body>` |
+| --- | --- |
+| Navy | *(no class)* |
+| All orange | `chrome-header-orange chrome-footer-orange accent-orange` |
+| Orange header | `chrome-header-orange accent-orange` |
+| Orange footer | `chrome-footer-orange accent-orange` |
 
-**Contrast is why the orange theme uses dark navy text, not white:**
+This is why the header and footer carry separate text-colour tokens: a mixed
+pair needs white on one band and dark navy on the other at the same time.
+`build.css` ships identically for all four.
+
+**Contrast is why the orange bands use dark navy text, not white:**
 
 | | on Baker Orange `#F4771D` |
 | --- | --- |
 | white | 2.8:1 — fails AA at any size |
 | dark navy `#111527` | 6.47:1 — passes |
 
-So the orange bars carry dark navy text, matching how bakeru.edu treats its own
-orange buttons. Links inside Slate content stay navy in both themes; orange on
-white is 2.8:1 and can never be text. The one open item is the logo — see
-`images/README.md`.
+So the orange bands carry dark navy text, matching how bakeru.edu treats its own
+orange buttons. Links inside Slate content stay navy in every treatment; orange
+on white is 2.8:1 and can never be text.
+
+Worth knowing when the options are discussed: **bakeru.edu never runs orange as
+a full-width band.** It uses orange for buttons, the flame in the mark, and
+accents, against navy structure. The all-orange treatment is the furthest of the
+four from how the site handles its own palette. The one open item is the logo —
+see `images/README.md`.
 
 ### Colors follow the website, not the brand PDF
 
@@ -238,7 +261,8 @@ in headless Chromium at phone and tablet widths. Checked and fixed:
       Slate UI overrides in `build.css` section 6 came from a known-good
       implementation, not from Baker's own instance
 - [x] Publish staging for client review
-- [x] Orange alternate theme for client review
+- [x] Orange alternate treatments for client review (all orange, plus the two
+      mixed pairs)
 - [ ] Request Baker's reversed / one-colour lockup if the orange theme is chosen
 - [ ] Upload the logo into Slate at `/images/logo-baker.svg`
 - [ ] Deploy to Slate (`shared/README.md`)

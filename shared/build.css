@@ -48,6 +48,10 @@
     --color-text-body:    #333333;
     --color-text-heading: var(--color-navy-deep);
     --color-text-on-dark: var(--color-white);
+    /* The header and footer are themed independently (see section 7), so each
+       band carries its own text colour rather than sharing one. */
+    --color-text-on-header: var(--color-text-on-dark);
+    --color-text-on-footer: var(--color-text-on-dark);
     --color-link:         var(--color-navy);   /* NOT orange — see note below */
     --color-bg-page:      var(--color-white);
     --color-bg-header:    var(--color-navy);
@@ -358,12 +362,12 @@ body {
 }
 
 /* The brand link wraps only an image, so it normally shows no text — but if
-   the logo ever fails to load, the alt text must still be legible on navy
+   the logo ever fails to load, the alt text must still be legible on the band
    rather than falling back to the browser's default link blue. */
 .site-header a,
 .site-header a:link,
 .site-header a:visited {
-    color: var(--color-text-on-dark);
+    color: var(--color-text-on-header);
     text-decoration: none;
 }
 
@@ -404,7 +408,7 @@ body {
 
 .site-footer {
     background-color: var(--color-bg-footer);
-    color: var(--color-text-on-dark);
+    color: var(--color-text-on-footer);
     font-size: var(--fz-ui);
     line-height: var(--lh-snug);
 }
@@ -416,12 +420,12 @@ body {
 .site-footer a,
 .site-footer a:link,
 .site-footer a:visited {
-    color: var(--color-text-on-dark);
+    color: var(--color-text-on-footer);
     text-decoration: none;
 }
 
-/* Text color never changes on hover — white is the only value with reliable
-   contrast on navy. Only the underline changes state. */
+/* Text colour never changes on hover — one value per band is the only one with
+   reliable contrast on it. Only the underline changes state. */
 .site-footer a:hover,
 .site-footer a:focus-visible {
     text-decoration: underline;
@@ -1031,80 +1035,88 @@ div#menu ul li a {
 
 
 /* ============================================================================
-   7. ORANGE THEME  (body class: theme-orange)
+   7. CHROME THEMES
    ----------------------------------------------------------------------------
-   An alternate treatment that leads with Baker Orange in the header and footer
-   instead of navy, for client review.
+   The header band, the footer band and the content accents are three
+   independent switches, so any combination the client wants is a class list on
+   <body> rather than a new stylesheet:
 
-   It is expressed almost entirely as token overrides, which is the point of
-   section 1: the component CSS below is untouched and stays the single
-   implementation. Only two things are not tokens — the logo file (an <img>
-   src, swapped per theme by tools/make-staging.py) and the handful of rules at
-   the bottom where a colour pair inverts rather than shifts.
+     (none)                                      navy chrome, navy accents
+     chrome-header-orange chrome-footer-orange accent-orange     all orange
+     chrome-header-orange accent-orange          orange header, navy footer
+     chrome-footer-orange accent-orange          navy header, orange footer
+
+   Every component rule above is untouched; these only move tokens. That is why
+   the header and footer carry separate text-colour tokens — a mixed pair needs
+   white on one band and dark navy on the other at the same time.
 
    ACCESSIBILITY, and why nothing here is white on orange:
 
      white           on #F4771D  =  2.8:1   fails AA at any size
-     logo navy       on #F4771D  =  5.93:1  passes AA
      dark navy       on #F4771D  =  6.47:1  passes AA, and is what we use
 
-   So the orange bars carry dark navy text and a navy lockup, which is also how
-   bakeru.edu uses orange on its own buttons. Orange as a background with dark
-   text, never orange as text.
+   Orange is always a background with dark text on it, never text itself. That
+   is also how bakeru.edu uses it: its buttons are orange with dark navy labels,
+   and the site never runs orange as a full-width band.
    ============================================================================ */
 
-.theme-orange {
-    --color-bg-header:    var(--color-orange-brand);
-    --color-bg-footer:    var(--color-orange-brand);
-    --color-text-on-dark: var(--color-navy-deep);
-    --color-divider:      rgba(17, 21, 39, 0.25);
+.chrome-header-orange {
+    --color-bg-header:      var(--color-orange-brand);
+    --color-text-on-header: var(--color-navy-deep);
+}
+
+.chrome-footer-orange {
+    --color-bg-footer:      var(--color-orange-brand);
+    --color-text-on-footer: var(--color-navy-deep);
+    --color-divider:        rgba(17, 21, 39, 0.25);
 }
 
 /* The chrome's focus ring is white on navy; on orange it needs the dark value
    to stay visible. */
-.theme-orange .site-header a:focus-visible,
-.theme-orange .site-footer a:focus-visible {
+.chrome-header-orange .site-header a:focus-visible,
+.chrome-footer-orange .site-footer a:focus-visible {
     outline-color: var(--color-navy-deep);
 }
 
 /* Social icons invert the other way round on orange: navy icon on orange,
    becoming an orange icon inside a navy disc. */
-.theme-orange .site-footer__social a:hover,
-.theme-orange .site-footer__social a:focus-visible {
+.chrome-footer-orange .site-footer__social a:hover,
+.chrome-footer-orange .site-footer__social a:focus-visible {
     background-color: var(--color-navy-deep);
     color: var(--color-orange-brand);
 }
 
-/* Give the content area some of the orange too, the way the site does: primary
-   buttons become orange with dark navy text. Links inside Slate content stay
-   navy — orange on white fails contrast as text, whatever the theme. */
-.theme-orange button.default,
-.theme-orange button[type=button],
-.theme-orange button[type=submit],
-.theme-orange #content input[type=submit] {
+/* ---- Content accents ----
+   Carries the orange into the page body the way the site does — as fills with
+   dark text. Links inside Slate content stay navy in every theme; orange on
+   white is 2.8:1 and can never be text. */
+
+.accent-orange button.default,
+.accent-orange button[type=button],
+.accent-orange button[type=submit],
+.accent-orange #content input[type=submit] {
     background-color: var(--color-orange-brand);
     color: var(--color-navy-deep);
 }
 
-.theme-orange button.default:hover,
-.theme-orange button[type=button]:hover,
-.theme-orange button[type=submit]:hover,
-.theme-orange #content input[type=submit]:hover {
+.accent-orange button.default:hover,
+.accent-orange button[type=button]:hover,
+.accent-orange button[type=submit]:hover,
+.accent-orange #content input[type=submit]:hover {
     background-color: var(--color-navy);
     color: var(--color-white);
 }
 
-/* Selected subtab and portal sidebar accents pick up the orange. */
-.theme-orange #content ul.subtabs li a.selected {
+.accent-orange #content ul.subtabs li a.selected {
     background-color: var(--color-orange-brand) !important;
     color: var(--color-navy-deep) !important;
 }
 
-.theme-orange #content ul.subtabs li.selected a:hover {
+.accent-orange #content ul.subtabs li.selected a:hover {
     background-color: var(--color-navy) !important;
     color: var(--color-white) !important;
 }
 
-.theme-orange #content div#menu ul li a.selected {
+.accent-orange #content div#menu ul li a.selected {
     border-left-color: var(--color-orange-brand);
 }

@@ -47,16 +47,19 @@ In `build.xslt`, near the top of `<head>`:
 Set `?v=` to the current date and time as `yyyyMMddHHmm`. Without this,
 browsers keep the cached stylesheet and the deploy looks like it did nothing.
 
-### 1b. Set the theme
+### 1b. Set the treatment
 
-If the client picked the orange treatment, add the class to `<body>` in
+Whichever chrome treatment the client picked is a class list on `<body>` in
 `build.xslt`:
 
-```xml
-<body class="theme-orange">
-```
+| Treatment | `<body>` |
+| --- | --- |
+| Navy | `<body>` — no class |
+| All orange | `<body class="chrome-header-orange chrome-footer-orange accent-orange">` |
+| Orange header, navy footer | `<body class="chrome-header-orange accent-orange">` |
+| Navy header, orange footer | `<body class="chrome-footer-orange accent-orange">` |
 
-Navy is the default and needs no change. `build.css` is identical either way.
+`build.css` is identical in every case.
 
 ### 2. Paste into the Branding Editor
 
