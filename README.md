@@ -24,12 +24,14 @@ python3 -m http.server 8000
 Opening `index.html` directly off the filesystem also works; a server is only
 needed if you want paths to behave exactly as they do in Slate.
 
-## Review URL
+## Review URLs
 
 The staging pages are published with GitHub Pages from `main`:
 
-- Form page: <https://visionpointmarketing.github.io/baker-slate-template/>
-- Portal page: <https://visionpointmarketing.github.io/baker-slate-template/portal.html>
+| | Navy (default) | Orange (alternate) |
+| --- | --- | --- |
+| Form | [index.html](https://visionpointmarketing.github.io/baker-slate-template/) | [index-orange.html](https://visionpointmarketing.github.io/baker-slate-template/index-orange.html) |
+| Portal | [portal.html](https://visionpointmarketing.github.io/baker-slate-template/portal.html) | [portal-orange.html](https://visionpointmarketing.github.io/baker-slate-template/portal-orange.html) |
 
 Pushing to `main` republishes within a minute or so. A small review bar at the
 top of each staging page links between the two layouts; it is injected by
@@ -109,6 +111,31 @@ to `PAGES` in the script.
 ---
 
 ## Design decisions worth knowing
+
+### Two themes, one stylesheet
+
+The orange treatment is not a second stylesheet or a fork. `build.css` section 7
+overrides tokens under a `.theme-orange` body class; every component rule stays
+as it is. That is what the token layer in section 1 was for.
+
+Shipping whichever theme the client picks means two edits to `build.xslt`:
+
+- navy — nothing; it's the default
+- orange — add `class="theme-orange"` to `<body>`
+
+Nothing else changes, and `build.css` ships the same either way.
+
+**Contrast is why the orange theme uses dark navy text, not white:**
+
+| | on Baker Orange `#F4771D` |
+| --- | --- |
+| white | 2.8:1 — fails AA at any size |
+| dark navy `#111527` | 6.47:1 — passes |
+
+So the orange bars carry dark navy text, matching how bakeru.edu treats its own
+orange buttons. Links inside Slate content stay navy in both themes; orange on
+white is 2.8:1 and can never be text. The one open item is the logo — see
+`images/README.md`.
 
 ### Colors follow the website, not the brand PDF
 
@@ -210,7 +237,9 @@ in headless Chromium at phone and tablet widths. Checked and fixed:
 - [ ] Drop Baker's current Slate files into `reference/` and reconcile — the
       Slate UI overrides in `build.css` section 6 came from a known-good
       implementation, not from Baker's own instance
-- [ ] Publish staging for client review
+- [x] Publish staging for client review
+- [x] Orange alternate theme for client review
+- [ ] Request Baker's reversed / one-colour lockup if the orange theme is chosen
 - [ ] Upload the logo into Slate at `/images/logo-baker.svg`
 - [ ] Deploy to Slate (`shared/README.md`)
 

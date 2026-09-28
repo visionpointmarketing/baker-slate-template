@@ -3,9 +3,22 @@
 Mirrors the `/images/` folder inside Baker's Slate instance, so the same paths
 resolve in staging and in production.
 
-| File              | Status  | Used by                            | Source                                                                 |
-| ----------------- | ------- | ---------------------------------- | ---------------------------------------------------------------------- |
-| `logo-baker.svg`  | needed  | header + footer (`<img>` in both)  | `https://www.bakeru.edu/themes/custom/baker_theme/logo.svg`             |
+| File                   | Status     | Used by                          | Source                                                        |
+| ---------------------- | ---------- | -------------------------------- | ------------------------------------------------------------- |
+| `logo-baker.svg`       | ✓ in place | navy theme, header + footer      | `https://www.bakeru.edu/themes/custom/baker_theme/logo.svg`    |
+| `logo-baker-navy.svg`  | ✓ stand-in | orange theme, header + footer    | derived from the above by fill swap — see below                |
+
+## The navy lockup is a stand-in
+
+`logo-baker.svg` is a white wordmark with an orange flame, drawn for a navy
+background. On the orange theme neither colour holds up: white on Baker Orange
+is 2.8:1, and the orange flame disappears into the bar.
+
+`logo-baker-navy.svg` is the same artwork with `white` and `#F58025` swapped to
+the logo's own navy `#002D62`. No paths were altered. Baker's brand guidelines
+list navy, reversed and one-colour lockups as approved secondary options, so a
+proper version of this exists in their brand files — **request it and replace
+this before anything ships**, rather than shipping artwork we recoloured.
 
 One asset, used in two places. The SVG is a white wordmark with the orange
 flame mark, drawn for a navy background — which is what both the header and the

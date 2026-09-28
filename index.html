@@ -29,7 +29,8 @@
             border-bottom: 1px solid rgba(23, 31, 61, 0.15);
         }
         .preview-bar strong { font-weight: 700; }
-        .preview-bar nav { display: flex; flex-wrap: wrap; gap: 8px 16px; }
+        .preview-bar nav { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; }
+        .preview-bar__group { font-weight: 700; }
         .preview-bar a { color: #212B56; padding: 4px 0; }
         .preview-bar a[aria-current] { text-decoration: none; font-weight: 700; }
         @media print { .preview-bar { display: none; } }
@@ -45,9 +46,15 @@
     <div class="preview-bar">
         <strong>Staging preview</strong>
         <span>Slate branding for Baker University &mdash; not a live Slate page.</span>
-        <nav aria-label="Preview pages">
-                <a href="index.html" aria-current="page">Form page</a>
-                <a href="portal.html">Portal page</a>
+        <nav aria-label="Navy theme pages">
+            <span class="preview-bar__group">Navy:</span>
+                <a href="index.html" aria-current="page">Form</a>
+                <a href="portal.html">Portal</a>
+        </nav>
+        <nav aria-label="Orange theme pages">
+            <span class="preview-bar__group">Orange:</span>
+                <a href="index-orange.html">Form</a>
+                <a href="portal-orange.html">Portal</a>
         </nav>
     </div>
 

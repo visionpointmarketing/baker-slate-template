@@ -47,6 +47,17 @@ In `build.xslt`, near the top of `<head>`:
 Set `?v=` to the current date and time as `yyyyMMddHHmm`. Without this,
 browsers keep the cached stylesheet and the deploy looks like it did nothing.
 
+### 1b. Set the theme
+
+If the client picked the orange treatment, add the class to `<body>` in
+`build.xslt`:
+
+```xml
+<body class="theme-orange">
+```
+
+Navy is the default and needs no change. `build.css` is identical either way.
+
 ### 2. Paste into the Branding Editor
 
 Database → Branding → Branding Editor. For each of the three files: select it
