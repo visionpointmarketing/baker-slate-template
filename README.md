@@ -26,20 +26,13 @@ needed if you want paths to behave exactly as they do in Slate.
 
 ## Review URLs
 
-The staging pages are published with GitHub Pages from `main`:
+Published with GitHub Pages from `main`:
 
-Four chrome treatments, each in both layouts. A bar at the top of every page
-links between them.
-
-| Treatment | Form page | Portal page |
-| --- | --- | --- |
-| Navy | [index.html](https://visionpointmarketing.github.io/baker-slate-template/) | [portal.html](https://visionpointmarketing.github.io/baker-slate-template/portal.html) |
-| All orange | [index-orange.html](https://visionpointmarketing.github.io/baker-slate-template/index-orange.html) | [portal-orange.html](https://visionpointmarketing.github.io/baker-slate-template/portal-orange.html) |
-| Orange header, navy footer | [index-orange-header.html](https://visionpointmarketing.github.io/baker-slate-template/index-orange-header.html) | [portal-orange-header.html](https://visionpointmarketing.github.io/baker-slate-template/portal-orange-header.html) |
-| Navy header, orange footer | [index-orange-footer.html](https://visionpointmarketing.github.io/baker-slate-template/index-orange-footer.html) | [portal-orange-footer.html](https://visionpointmarketing.github.io/baker-slate-template/portal-orange-footer.html) |
+- Form page: <https://visionpointmarketing.github.io/baker-slate-template/>
+- Portal page: <https://visionpointmarketing.github.io/baker-slate-template/portal.html>
 
 Pushing to `main` republishes within a minute or so. A small review bar at the
-top of each staging page links between the two layouts; it is injected by
+top of each staging page links between the two; it is injected by
 `tools/make-staging.py` with its own inline styles and never reaches Slate.
 
 Every asset path in the staging pages is relative, which is what lets them work
@@ -47,101 +40,49 @@ under the `/baker-slate-template/` sub-path a project Pages site serves from.
 Do not switch them to root-relative paths — that works locally and breaks on
 Pages. `.nojekyll` is committed so Pages serves the files as they are.
 
----
-
-## Folder structure
-
-```
-baker-slate-template/
-├── index.html          ← staging: a form page          (GENERATED)
-├── portal.html         ← staging: a checklist/portal page (GENERATED)
-├── README.md
-├── shared/             ← mirrors Slate's /shared/ — these three files ship
-│   ├── build.xslt          page template wrapping every Slate page
-│   ├── build.css           all styling, including Slate UI overrides
-│   ├── build-fonts.css     FontAwesome @font-face (Google Fonts load via <link>)
-│   └── README.md           deploy instructions
-├── images/             ← mirrors Slate's /images/
-│   ├── logo-baker.svg      the one branding asset
-│   └── README.md
-├── tools/
-│   ├── make-staging.py     regenerates the staging pages from build.xslt
-│   └── demo/               the demo content each staging page wraps
-└── reference/          ← Baker's CURRENT Slate files, for diffing. Never ships.
-    └── README.md
-```
-
-Two staging pages, because Slate lays out two kinds of page differently: a form
-at a reading measure, and a checklist/portal with a sidebar at a wider one. One
-page showing both at once would misrepresent each.
-
-The folder names are not decoration. `shared/` and `images/` are the paths
-those files live at inside Slate, which is what lets the same CSS work in both
-places — see below.
-
----
-
-## One stylesheet, two environments
-
-`index.html` loads `shared/build.css` — the exact file that gets pasted into
-Slate's Branding Editor. Not a staging copy of it, not a modular source that
-gets flattened into it. The same bytes.
-
-This is possible because the stylesheet contains no `url()` references: Baker's
-footer is flat navy, so the only asset is the logo, and that is an `<img>` in
-the markup rather than a CSS background.
-
-The one difference between environments is that logo's path:
-
-| | Path |
-| --- | --- |
-| `index.html` (staging) | `images/logo-baker.svg` — relative, so the page works from any base URL |
-| `shared/build.xslt` (Slate) | `/images/logo-baker.svg` — absolute, because Slate renders pages at many different URLs |
-
-Everything else is shared. There is no "remember to update both" step.
-
-The header and footer markup is not duplicated either. `build.xslt` is the only
-place it's written; the staging pages are generated from it:
-
-```bash
-python3 tools/make-staging.py
-```
-
-That script lifts the chrome out of `build.xslt`, swaps the Slate-absolute image
-path for a relative one, and wraps each fragment in `tools/demo/`. **Never edit
-`index.html` or `portal.html` directly** — change `build.xslt` or a demo
-fragment and re-run. Adding a staging page means adding a fragment and one line
-to `PAGES` in the script.
-
----
-
 ## Design decisions worth knowing
 
-### Four treatments, one stylesheet
+### The approved palette, and where accessibility shaped it
 
-None of the orange treatments is a fork. `build.css` section 7 defines three
-independent switches that only move tokens — every component rule above them is
-untouched:
+Baker signed off on 2026-10-02: orange header and footer, orange buttons, black
+replacing navy throughout, buttons rounded rather than square, hover going to a
+black fill with an orange label.
 
-| Class | What it changes |
-| --- | --- |
-| `chrome-header-orange` | header band to orange, its text to dark navy |
-| `chrome-footer-orange` | footer band to orange, its text to dark navy |
-| `accent-orange` | content accents: primary button, selected subtab, sidebar rule |
+Three choices inside that were settled by contrast rather than preference, and
+each is worth being able to explain:
 
-A treatment is a class list on `<body>`, so shipping whichever one the client
-picks is one attribute in `build.xslt`:
+| Element | Decision | Why |
+| --- | --- | --- |
+| Text on the orange bands | black | 7.5:1, up from navy's 6.47:1 — dropping navy improved it |
+| Primary CTA label | **white** on `#BC421B` | black on `#BC421B` is 3.93:1 and fails AA; white is 5.34:1 |
+| Links in content | `#BC421B`, underlined | Cadmium Orange is 2.8:1 on white and can never be text; Autumn Maple is 5.34:1 |
 
-| Treatment | `<body>` |
-| --- | --- |
-| Navy | *(no class)* |
-| All orange | `chrome-header-orange chrome-footer-orange accent-orange` |
-| Orange header | `chrome-header-orange accent-orange` |
-| Orange footer | `chrome-footer-orange accent-orange` |
+Two more that were not in the feedback but were fixed in the same pass, both
+WCAG 1.4.11 (non-text contrast, 3:1):
 
-This is why the header and footer carry separate text-colour tokens: a mixed
-pair needs white on one band and dark navy on the other at the same time.
-`build.css` ships identically for all four.
+- **Focus ring is black, not orange.** An orange ring on the white content area
+  is 2.8:1 and fails. Black is 21:1 on white and 7.5:1 on the orange bands, so
+  one colour covers the whole page.
+- **Input borders are `#595959`, not a hairline tint.** The previous
+  `rgba(33,43,86,.17)` border was decorative and failed; this is 7:1.
+
+Measured across both staging pages: nothing below 5.34:1, most at 7.5:1 or 21:1.
+
+### One stylesheet, one treatment
+
+The approved treatment is the default in `build.css`, so `build.xslt` needs no
+theme class on `<body>` and there is no switch to get wrong.
+
+The navy and mixed treatments that were built for the comparison round are gone
+from the working tree. They are in git history at commit `37a2f18` if anyone
+ever wants them back:
+
+```bash
+git show 37a2f18:index-orange-header.html
+```
+
+The header and footer still carry separate text-colour tokens, which is what
+made those mixed pairs possible and costs nothing to keep.
 
 **Contrast is why the orange bands use dark navy text, not white:**
 
@@ -263,7 +204,10 @@ in headless Chromium at phone and tablet widths. Checked and fixed:
 - [x] Publish staging for client review
 - [x] Orange alternate treatments for client review (all orange, plus the two
       mixed pairs)
-- [ ] Request Baker's reversed / one-colour lockup if the orange theme is chosen
+- [x] Client feedback of 2026-10-02 applied: orange chrome, orange buttons,
+      black replacing navy, rounded controls
+- [ ] Request Baker's reversed / one-colour lockup — now confirmed as needed,
+      since the orange chrome is the approved direction
 - [ ] Upload the logo into Slate at `/images/logo-baker.svg`
 - [ ] Deploy to Slate (`shared/README.md`)
 

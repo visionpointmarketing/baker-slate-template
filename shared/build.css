@@ -24,61 +24,65 @@
 /* ============================================================================
    1. DESIGN TOKENS
    ----------------------------------------------------------------------------
-   Colors are sampled from bakeru.edu's computed styles, not from the brand
-   guidelines PDF, because the portal has to read as part of the live site.
+   The palette is the one Baker approved on 2026-10-02: orange header and
+   footer, orange buttons, black replacing navy throughout.
 
-   Where they differ (the PDF lists navy #001E42 and Cadmium Orange #F4771D as
-   primary; the site renders navy #212B56 and a lighter orange), the site wins.
-   Both values are recorded here so the difference is a decision, not a bug.
+   Every value here has been checked for contrast, and the notes record which
+   ones were constrained by that rather than chosen freely. Full table in
+   README.md; the two that matter most:
+
+     black        on Baker Orange #F4771D  =  7.5:1   (was navy at 6.47:1)
+     white        on Autumn Maple #BC421B  =  5.34:1
+     black        on Autumn Maple #BC421B  =  3.93:1  — fails AA, not used
    ============================================================================ */
 
 :root {
 
-    /* Brand — as the live site renders them */
-    --color-navy:         #212B56;   /* main header bar, footer, primary buttons */
-    --color-navy-dark:    #171F3D;   /* site's utility bar; hover/active surfaces */
-    --color-navy-deep:    #111527;   /* headings, text on light/orange surfaces */
-    --color-orange:       #F6924A;   /* accent fills — pairs with navy-deep text */
-    --color-orange-brand: #F4771D;   /* brand guide Cadmium Orange; accents only  */
-    --color-light-navy:   #EBEEF9;   /* tint surfaces, pill backgrounds */
+    /* Brand */
+    --color-orange:       #F4771D;   /* Cadmium Orange — header, footer, accents */
+    --color-orange-deep:  #BC421B;   /* Autumn Maple — primary call to action */
+    --color-black:        #000000;   /* replaces navy everywhere it appeared */
     --color-white:        #FFFFFF;
-    --color-off-white:    #FFFCF6;   /* the site's nav text white */
+    --color-tint:         #F2F2F2;   /* neutral hover surface */
 
     /* Surfaces & text */
-    --color-text-body:    #333333;
-    --color-text-heading: var(--color-navy-deep);
-    --color-text-on-dark: var(--color-white);
-    /* The header and footer are themed independently (see section 7), so each
-       band carries its own text colour rather than sharing one. */
+    --color-text-body:    var(--color-black);
+    --color-text-heading: var(--color-black);
+    --color-text-on-dark: var(--color-black);
+    /* The header and footer are themed separately so each can carry the text
+       colour its own background needs. */
     --color-text-on-header: var(--color-text-on-dark);
     --color-text-on-footer: var(--color-text-on-dark);
-    --color-link:         var(--color-navy);   /* NOT orange — see note below */
+    --color-link:         var(--color-orange-deep);
     --color-bg-page:      var(--color-white);
-    --color-bg-header:    var(--color-navy);
-    --color-bg-footer:    var(--color-navy);
-    --color-divider:      rgba(255, 255, 255, 0.18);
-    --color-border-soft:  rgba(33, 43, 86, 0.17);
+    --color-bg-header:    var(--color-orange);
+    --color-bg-footer:    var(--color-orange);
+    --color-divider:      rgba(0, 0, 0, 0.3);
 
-    /* Accessibility note on orange:
-       #F4771D on white is about 2.8:1 — it fails WCAG AA for text. Orange is
-       used here as a fill with --color-navy-deep text on top (the pattern the
-       live site uses for its buttons), never as text or a link color. */
+    /* Interactive edges. WCAG 1.4.11 wants 3:1 against the adjacent colour for
+       control borders and focus indicators, so these are not decorative values:
+         #595959 on white  =  7.0:1
+         black   on white  = 21.0:1
+         black   on orange =  7.5:1
+       A light grey hairline or an orange focus ring would both fail — orange on
+       white is only 2.8:1. */
+    --color-border-input: #595959;
+    --color-focus-ring:   var(--color-black);
 
-    /* Typography — both families are Google Fonts and both match the brand
-       guidelines, so there is no paid-font substitution to manage. */
+    /* Typography — both families are Google Fonts and match the brand guide. */
     --font-heading: "Newsreader", Georgia, "Times New Roman", serif;
     --font-body:    "Roboto", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
 
     /* Type scale */
-    --fz-display:   3rem;        /* 48px */
-    --fz-h1:        2.25rem;     /* 36px */
-    --fz-h2:        1.75rem;     /* 28px */
-    --fz-h3:        1.25rem;     /* 20px */
+    --fz-display:   3rem;
+    --fz-h1:        2.25rem;
+    --fz-h2:        1.75rem;
+    --fz-h3:        1.25rem;
     --fz-body:      1.125rem;    /* 18px — the site's body size */
     --fz-ui:        1rem;        /* 16px — footer links, utility text */
     --fz-lede:      1.25rem;     /* 20px — intro paragraph under a page title */
-    --fz-small:     0.875rem;    /* 14px */
-    --fz-legal:     0.8125rem;   /* 13px */
+    --fz-small:     0.875rem;
+    --fz-legal:     0.8125rem;
 
     --lh-tight:     1.15;
     --lh-snug:      1.35;
@@ -107,8 +111,10 @@
     --logo-height:        52px;
     --logo-height-sm:     40px;
 
+    /* Rounded, not square — buttons and tabs are pills, inputs take the
+       softened radius. */
     --radius-pill:        9999px;
-    --radius-sm:          4px;
+    --radius-sm:          8px;
     --transition-fast:    150ms ease;
 }
 
@@ -175,7 +181,7 @@ svg {
     z-index: 999;
     padding: var(--space-xs) var(--space-sm);
     background-color: var(--color-white);
-    color: var(--color-navy);
+    color: var(--color-black);
     font-family: var(--font-body);
     font-weight: 700;
     text-decoration: none;
@@ -193,7 +199,7 @@ button:focus,
 input:focus,
 select:focus,
 textarea:focus {
-    outline: 3px solid var(--color-orange);
+    outline: 3px solid var(--color-focus-ring);
     outline-offset: 2px;
 }
 
@@ -210,16 +216,14 @@ button:focus-visible,
 input:focus-visible,
 select:focus-visible,
 textarea:focus-visible {
-    outline: 3px solid var(--color-orange);
+    outline: 3px solid var(--color-focus-ring);
     outline-offset: 2px;
 }
 
-/* On navy, orange does not separate from the background enough — use white
-   with an orange inner edge so the ring reads on either surface. */
-.site-header a:focus-visible,
-.site-footer a:focus-visible {
-    outline-color: var(--color-white);
-}
+/* One ring colour works everywhere here: black is 21:1 on the white content
+   area and 7.5:1 on the orange bands, both well clear of the 3:1 that WCAG
+   1.4.11 requires of a focus indicator. An orange ring would have failed on
+   white at 2.8:1. */
 
 
 /* ============================================================================
@@ -402,7 +406,7 @@ body {
    5. COMPONENTS — site-footer
    ----------------------------------------------------------------------------
    Mirrors bakeru.edu's footer: brand + social, contact, utility links, the
-   non-discrimination statement, and a legal row. Flat navy, no background
+   non-discrimination statement, and a legal row. Flat orange, no background
    image — which is why this stylesheet has no url() references at all.
    ============================================================================ */
 
@@ -468,19 +472,20 @@ body {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 40px;
-    height: 40px;
+    width: 44px;
+    height: 44px;
     border-radius: var(--radius-pill);
-    color: var(--color-white);
+    color: var(--color-text-on-footer);
     transition: background-color var(--transition-fast), color var(--transition-fast);
 }
 
-/* The one place the treatment inverts: the icon is the visual focus, not text,
-   and orange-on-navy-deep clears contrast comfortably. */
+/* The icons sit on the orange band, so they are black at rest — a white icon
+   would be 2.8:1 against orange and fail WCAG 1.4.11's 3:1 for non-text. On
+   hover the pair inverts to an orange glyph in a black disc, 7.5:1. */
 .site-footer__social a:hover,
 .site-footer__social a:focus-visible {
-    background-color: var(--color-orange);
-    color: var(--color-navy-deep);
+    background-color: var(--color-black);
+    color: var(--color-orange);
     text-decoration: none;
 }
 
@@ -590,7 +595,7 @@ body {
    menu sidebar, event registration, decision letters.
 
    Most of these are carried over from the standard Slate build.css and
-   recolored to Baker's navy. They are known fixes for Slate's own markup, so
+   recolored to Baker's palette. They are known fixes for Slate's own markup, so
    if a future Slate release breaks one, comment it out rather than deleting it
    — that keeps the history of why it existed.
 
@@ -599,8 +604,12 @@ body {
    already relies on that is not represented here needs to be carried forward.
    ============================================================================ */
 
-/* Links inside Slate content. Navy, not orange — orange fails contrast on
-   white at text sizes. */
+/* Links inside Slate content: Autumn Maple, underlined, going black on hover.
+
+   Cadmium Orange is 2.8:1 on white and can never be a text colour. Autumn
+   Maple is 5.34:1 and passes, so it carries the orange direction into the body
+   copy without failing. The underline stays on at rest: colour alone is never
+   the only thing marking a link (WCAG 1.4.1). */
 #content a,
 #content a:link,
 #content a:visited {
@@ -611,8 +620,8 @@ body {
 #content a:hover,
 #content a:active,
 #content a:focus-visible {
-    color: var(--color-navy-dark);
-    text-decoration: none;
+    color: var(--color-black);
+    text-decoration: underline;
 }
 
 /* ----------------------------------------------------------------------------
@@ -666,7 +675,7 @@ body {
     width: 1.125rem;
     height: 1.125rem;
     margin: 0;
-    accent-color: var(--color-navy);
+    accent-color: var(--color-orange-deep);
 }
 
 /* Subtabs are a horizontal row of pills, not a bulleted list. */
@@ -689,7 +698,7 @@ body {
 #content th,
 #content td {
     padding: var(--space-xs) var(--space-sm);
-    border-bottom: 1px solid var(--color-border-soft);
+    border-bottom: 1px solid var(--color-border-input);
     text-align: left;
     vertical-align: top;
 }
@@ -769,7 +778,7 @@ input:not([type]) {
 #content textarea,
 #content select {
     padding: 8px 10px;
-    border: 1px solid var(--color-border-soft);
+    border: 1px solid var(--color-border-input);
     border-radius: var(--radius-sm);
     background-color: var(--color-white);
     color: var(--color-text-body);
@@ -780,7 +789,7 @@ input:not([type]) {
    conveyed by color. */
 #content .form_question label .required,
 #content .required {
-    color: var(--color-navy-dark);
+    color: var(--color-black);
     font-weight: 700;
 }
 
@@ -797,7 +806,7 @@ input:not([type]) {
 }
 
 #content fieldset {
-    border: 1px solid var(--color-border-soft);
+    border: 1px solid var(--color-border-input);
     border-radius: var(--radius-sm);
     padding: var(--space-md);
     /* Browsers give fieldset a default 2px inline margin, which knocks it off
@@ -805,26 +814,35 @@ input:not([type]) {
     margin: 0 0 var(--space-md);
 }
 
-/* Buttons — the site's pill treatment: navy fill, white label. */
+/* Buttons — pill shaped, Autumn Maple fill, hover inverts to black with an
+   orange label.
+
+   The label is white rather than black: black on #BC421B is 3.93:1, just under
+   the 4.5:1 AA needs for a 16-18px label. White is 5.34:1 and passes. The
+   "no navy, use black" direction is carried everywhere else. */
 button.default,
 button[type=button],
 button[type=submit],
 #content input[type=submit] {
-    padding: 10px 28px;
-    border: 0;
+    padding: 12px 32px;
+    border: 2px solid transparent;
     border-radius: var(--radius-pill);
-    background-color: var(--color-navy);
+    background-color: var(--color-orange-deep);
     color: var(--color-white);
     font-weight: 700;
     cursor: pointer;
-    transition: background-color var(--transition-fast);
+    transition: background-color var(--transition-fast), color var(--transition-fast);
 }
 
 button.default:hover,
 button[type=button]:hover,
 button[type=submit]:hover,
-#content input[type=submit]:hover {
-    background-color: var(--color-navy-dark);
+#content input[type=submit]:hover,
+button.default:focus-visible,
+button[type=button]:focus-visible,
+button[type=submit]:focus-visible {
+    background-color: var(--color-black);
+    color: var(--color-orange);   /* 7.5:1 on black */
 }
 
 /* Mobile: Slate's inputs default to fixed pixel widths that overflow. */
@@ -859,6 +877,7 @@ body > canvas {
 ul.tabs li a {
     height: 30px;
     font-size: var(--fz-small);
+    border-radius: var(--radius-pill);
 }
 
 .slide {
@@ -871,27 +890,29 @@ ul.tabs li a {
     padding-bottom: 20px;
 }
 
+/* Pills, matching the buttons — the client asked for rounded, not square. */
 #content ul.subtabs li a,
 #content ul.subtabs li a:link,
 #content ul.subtabs li a:visited {
     font-size: var(--fz-small);
-    color: var(--color-link);
-    padding: 10px;
-    border: 1px solid var(--color-border-soft);
-    box-shadow: 0.5px 0.5px 1px var(--color-border-soft);
-    border-radius: var(--radius-sm);
+    color: var(--color-black);
+    padding: 10px 20px;
+    border: 2px solid var(--color-black);
+    border-radius: var(--radius-pill);
     text-decoration: none;
 }
 
 #content ul.subtabs li a.selected {
-    background-color: var(--color-navy) !important;
+    background-color: var(--color-orange-deep) !important;
     color: var(--color-white) !important;
+    border-color: var(--color-orange-deep);
 }
 
+#content ul.subtabs li a:hover,
 #content ul.subtabs li.selected a:hover {
-    background-color: var(--color-navy-dark) !important;
-    color: var(--color-white) !important;
-    box-shadow: 0 5px 20px 5px rgba(0, 0, 0, 0.25);
+    background-color: var(--color-black) !important;
+    color: var(--color-orange) !important;
+    border-color: var(--color-black);
     transition: all 170ms;
 }
 
@@ -926,7 +947,7 @@ div#menu ul li {
 #content div#menu ul li a,
 #content div#menu ul li a:link,
 #content div#menu ul li a:visited {
-    color: var(--color-link);
+    color: var(--color-black);
     text-decoration: none;
 }
 
@@ -944,15 +965,15 @@ div#menu ul li a {
 
 #content div#menu ul li a:hover,
 #content div#menu ul li a:focus-visible {
-    background-color: var(--color-light-navy);
+    background-color: var(--color-tint);
     border-left-color: var(--color-orange);
     text-decoration: none;
 }
 
 #content div#menu ul li a.selected {
-    background-color: var(--color-light-navy);
-    border-left-color: var(--color-navy);
-    color: var(--color-navy);
+    background-color: var(--color-tint);
+    border-left-color: var(--color-orange-deep);
+    color: var(--color-orange-deep);
     font-weight: 700;
 }
 
@@ -1031,92 +1052,4 @@ div#menu ul li a {
     .slate-form-area__inner {
         max-width: none;
     }
-}
-
-
-/* ============================================================================
-   7. CHROME THEMES
-   ----------------------------------------------------------------------------
-   The header band, the footer band and the content accents are three
-   independent switches, so any combination the client wants is a class list on
-   <body> rather than a new stylesheet:
-
-     (none)                                      navy chrome, navy accents
-     chrome-header-orange chrome-footer-orange accent-orange     all orange
-     chrome-header-orange accent-orange          orange header, navy footer
-     chrome-footer-orange accent-orange          navy header, orange footer
-
-   Every component rule above is untouched; these only move tokens. That is why
-   the header and footer carry separate text-colour tokens — a mixed pair needs
-   white on one band and dark navy on the other at the same time.
-
-   ACCESSIBILITY, and why nothing here is white on orange:
-
-     white           on #F4771D  =  2.8:1   fails AA at any size
-     dark navy       on #F4771D  =  6.47:1  passes AA, and is what we use
-
-   Orange is always a background with dark text on it, never text itself. That
-   is also how bakeru.edu uses it: its buttons are orange with dark navy labels,
-   and the site never runs orange as a full-width band.
-   ============================================================================ */
-
-.chrome-header-orange {
-    --color-bg-header:      var(--color-orange-brand);
-    --color-text-on-header: var(--color-navy-deep);
-}
-
-.chrome-footer-orange {
-    --color-bg-footer:      var(--color-orange-brand);
-    --color-text-on-footer: var(--color-navy-deep);
-    --color-divider:        rgba(17, 21, 39, 0.25);
-}
-
-/* The chrome's focus ring is white on navy; on orange it needs the dark value
-   to stay visible. */
-.chrome-header-orange .site-header a:focus-visible,
-.chrome-footer-orange .site-footer a:focus-visible {
-    outline-color: var(--color-navy-deep);
-}
-
-/* Social icons invert the other way round on orange: navy icon on orange,
-   becoming an orange icon inside a navy disc. */
-.chrome-footer-orange .site-footer__social a:hover,
-.chrome-footer-orange .site-footer__social a:focus-visible {
-    background-color: var(--color-navy-deep);
-    color: var(--color-orange-brand);
-}
-
-/* ---- Content accents ----
-   Carries the orange into the page body the way the site does — as fills with
-   dark text. Links inside Slate content stay navy in every theme; orange on
-   white is 2.8:1 and can never be text. */
-
-.accent-orange button.default,
-.accent-orange button[type=button],
-.accent-orange button[type=submit],
-.accent-orange #content input[type=submit] {
-    background-color: var(--color-orange-brand);
-    color: var(--color-navy-deep);
-}
-
-.accent-orange button.default:hover,
-.accent-orange button[type=button]:hover,
-.accent-orange button[type=submit]:hover,
-.accent-orange #content input[type=submit]:hover {
-    background-color: var(--color-navy);
-    color: var(--color-white);
-}
-
-.accent-orange #content ul.subtabs li a.selected {
-    background-color: var(--color-orange-brand) !important;
-    color: var(--color-navy-deep) !important;
-}
-
-.accent-orange #content ul.subtabs li.selected a:hover {
-    background-color: var(--color-navy) !important;
-    color: var(--color-white) !important;
-}
-
-.accent-orange #content div#menu ul li a.selected {
-    border-left-color: var(--color-orange-brand);
 }
