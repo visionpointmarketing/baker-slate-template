@@ -29,12 +29,16 @@ PAGES = {
 # The review bar exists only on the staging pages, so reviewers can move between
 # the two layouts. It is injected here with its own inline styles rather than
 # living in build.css or build.xslt, so it cannot leak into what ships to Slate.
+#
+# It carries no navy either. The bar never reaches Slate, but it sits at the top
+# of every page the client reviews, and "remove navy" is easier to honour than
+# to explain away.
 REVIEW_BAR_CSS = """
     <style>
         .preview-bar {
             font: 500 14px/1.4 system-ui, -apple-system, "Segoe UI", sans-serif;
-            background: #EBEEF9;
-            color: #171F3D;
+            background: #F2F2F2;
+            color: #000000;
             padding: 10px 20px;
             display: flex;
             flex-wrap: wrap;
@@ -45,7 +49,7 @@ REVIEW_BAR_CSS = """
         .preview-bar strong { font-weight: 700; }
         .preview-bar nav { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; }
         .preview-bar__group { font-weight: 700; }
-        .preview-bar a { color: #212B56; padding: 4px 0; }
+        .preview-bar a { color: #BC421B; padding: 4px 0; }
         .preview-bar a[aria-current] { text-decoration: none; font-weight: 700; }
         @media print { .preview-bar { display: none; } }
     </style>"""
