@@ -902,10 +902,15 @@ ul.tabs li a {
     text-decoration: none;
 }
 
+/* The selected tab is Cadmium Orange with a black label, not the Autumn Maple
+   used by the primary buttons. Two reasons: #BC421B is reserved for primary
+   calls to action, so a tab wearing it would compete with the real CTA on the
+   same page; and black on #F4771D is 7.5:1 where white on #BC421B is 5.34:1. */
 #content ul.subtabs li a.selected {
-    background-color: var(--color-orange-deep) !important;
-    color: var(--color-white) !important;
-    border-color: var(--color-orange-deep);
+    background-color: var(--color-orange) !important;
+    color: var(--color-black) !important;
+    border-color: var(--color-orange);
+    font-weight: 700;
 }
 
 #content ul.subtabs li a:hover,
