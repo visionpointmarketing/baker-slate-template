@@ -98,8 +98,8 @@ on white is 2.8:1 and can never be text.
 Worth knowing when the options are discussed: **bakeru.edu never runs orange as
 a full-width band.** It uses orange for buttons, the flame in the mark, and
 accents, against navy structure. The all-orange treatment is the furthest of the
-four from how the site handles its own palette. The one open item is the logo —
-see `images/README.md`.
+four from how the site handles its own palette. The logo is Baker's one-colour black
+lockup from their brand guidelines — see `images/README.md`.
 
 ### Colors follow the website, not the brand PDF
 
@@ -196,7 +196,7 @@ in headless Chromium at phone and tablet widths. Checked and fixed:
 ## Status and next steps
 
 - [x] Staging pages, `build.css`, `build-fonts.css`, `build.xslt`
-- [x] `images/logo-baker.svg` in place
+- [x] `images/logo-baker-onecolor-black.svg` in place (from Baker's brand guidelines PDF)
 - [x] Browser QA pass
 - [ ] Drop Baker's current Slate files into `reference/` and reconcile — the
       Slate UI overrides in `build.css` section 6 came from a known-good
@@ -206,9 +206,9 @@ in headless Chromium at phone and tablet widths. Checked and fixed:
       mixed pairs)
 - [x] Client feedback of 2026-10-02 applied: orange chrome, orange buttons,
       black replacing navy, rounded controls
-- [ ] Request Baker's reversed / one-colour lockup — now confirmed as needed,
-      since the orange chrome is the approved direction
-- [ ] Upload the logo into Slate at `/images/logo-baker.svg`
+- [x] One-colour black lockup extracted from Baker's brand guidelines PDF and
+      applied to header and footer
+- [ ] Upload the logo into Slate at `/images/logo-baker-onecolor-black.svg`
 - [ ] Deploy to Slate (`shared/README.md`)
 
 ---

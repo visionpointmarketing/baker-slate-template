@@ -3,32 +3,33 @@
 Mirrors the `/images/` folder inside Baker's Slate instance, so the same paths
 resolve in staging and in production.
 
-| File                   | Status     | Used by                          | Source                                                        |
-| ---------------------- | ---------- | -------------------------------- | ------------------------------------------------------------- |
-| `logo-baker.svg`       | ✓ in place | navy theme, header + footer      | `https://www.bakeru.edu/themes/custom/baker_theme/logo.svg`    |
-| `logo-baker-navy.svg`  | ✓ stand-in | orange theme, header + footer    | derived from the above by fill swap — see below                |
+| File                            | Status     | Used by                      | Source                                                        |
+| ------------------------------- | ---------- | ---------------------------- | ------------------------------------------------------------- |
+| `logo-baker-onecolor-black.svg` | ✓ in place | header + footer (orange)     | Baker brand guidelines PDF — see below                        |
+| `logo-baker.svg`                | retired    | nothing (navy-era header)    | `https://www.bakeru.edu/themes/custom/baker_theme/logo.svg`    |
 
-## The navy lockup is a stand-in
+## Why the one-colour black lockup
 
-`logo-baker.svg` is a white wordmark with an orange flame, drawn for a navy
-background. On the orange theme neither colour holds up: white on Baker Orange
-is 2.8:1, and the orange flame disappears into the bar.
+The approved chrome is Cadmium Orange `#F4771D` in both the header and the
+footer. Neither of Baker's full-colour lockups survives on that background:
 
-`logo-baker-navy.svg` is the same artwork with `white` and `#F58025` swapped to
-the logo's own navy `#002D62`. No paths were altered. Baker's brand guidelines
-list navy, reversed and one-colour lockups as approved secondary options, so a
-proper version of this exists in their brand files — **request it and replace
-this before anything ships**, rather than shipping artwork we recoloured.
+- `logo-baker.svg` (white wordmark, orange leaves) — white on the orange is
+  2.8:1, and the leaves disappear into the bar.
+- The navy lockup (navy wordmark, orange leaves) — the text holds at 4.78:1,
+  but the leaves are `#F48024` on `#F4771D`, about 1.06:1, so the mark is lost.
+  It also brings navy back, which the 2026-10-02 feedback removed.
 
-One asset, used in two places. The SVG is a white wordmark with the orange
-flame mark, drawn for a navy background — which is what both the header and the
-footer use, so no second light-background version is required.
+`logo-baker-onecolor-black.svg` is Baker's own one-colour lockup, extracted as
+vector paths from `BakerUniversity-BrandGuidelines-2026-1Pager.pdf` (Primary
+Logos & Lockups). Paths and fill (`#231F20`, Pantone Black C) are unaltered;
+only the viewBox was trimmed to the artwork. Black on the orange is 5.8:1, and
+it matches the "black wherever navy was" direction.
 
 ## Getting it in place
 
-1. Save the SVG from the URL above into this folder as `logo-baker.svg`.
+1. The SVG is already in this folder as `logo-baker-onecolor-black.svg`.
 2. Upload the same file into Slate at Database -> Configurations -> Files,
-   under `/images/`, so it resolves at `/images/logo-baker.svg`.
+   under `/images/`, so it resolves at `/images/logo-baker-onecolor-black.svg`.
 
 ## Replacing it later
 

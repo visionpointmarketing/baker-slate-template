@@ -27,14 +27,14 @@
 
           <!-- ============================================================
                SITE HEADER
-               Navy bar, logo only. The live site's mega-menu is intentionally
+               Orange bar, logo only. The live site's mega-menu is intentionally
                not carried over: it needs the site's JavaScript and every link
                in it leads away from the form the applicant is completing.
                ============================================================ -->
           <header class="site-header" role="banner">
             <div class="site-header__inner">
               <a class="site-header__brand" href="https://www.bakeru.edu/" aria-label="Baker University home">
-                <img class="site-header__logo" src="/images/logo-baker.svg" alt="Baker University" width="132" height="52" />
+                <img class="site-header__logo" src="/images/logo-baker-onecolor-black.svg" alt="Baker University" width="134" height="52" />
               </a>
             </div>
           </header>
@@ -68,7 +68,7 @@
 
                 <div class="site-footer__brand-col">
                   <a class="site-footer__brand" href="https://www.bakeru.edu/" aria-label="Baker University home">
-                    <img class="site-footer__logo" src="/images/logo-baker.svg" alt="Baker University" width="132" height="52" />
+                    <img class="site-footer__logo" src="/images/logo-baker-onecolor-black.svg" alt="Baker University" width="134" height="52" />
                   </a>
                   <p class="site-footer__social-label">Connect with us:</p>
                   <nav class="site-footer__social" aria-label="Social media">

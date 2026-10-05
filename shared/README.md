@@ -23,7 +23,7 @@ application checklist, decision letters.
    needs the same treatment — carry forward any Slate UI rule their instance
    depends on.
 2. **Upload the logo.** Database → Configurations → Files, at `/images/`, so it
-   resolves as `/images/logo-baker.svg`.
+   resolves as `/images/logo-baker-onecolor-black.svg`.
 3. **Validate the XSLT.** It has to be well-formed XML or Slate will reject it:
    ```bash
    python3 -c "import xml.etree.ElementTree as ET; ET.parse('shared/build.xslt')"
