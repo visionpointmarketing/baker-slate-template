@@ -208,6 +208,11 @@ in headless Chromium at phone and tablet widths. Checked and fixed:
       black replacing navy, rounded controls
 - [x] One-colour black lockup extracted from Baker's brand guidelines PDF and
       applied to header and footer
+- [x] Gradient header option for review (`index-gradient.html`,
+      `portal-gradient.html`) from Baker's 2026-10-05 gradient artwork. Opt-in
+      via `<body class="chrome-gradient">`; header only, footer stays solid
+      orange because black text fails on the red end (~3.2:1). Not approved —
+      Baker is still developing the gradient with their agency.
 - [ ] Upload the logo into Slate at `/images/logo-baker-onecolor-black.svg`
 - [ ] Deploy to Slate (`shared/README.md`)
 

@@ -57,6 +57,12 @@
     --color-bg-page:      var(--color-white);
     --color-bg-header:    var(--color-orange);
     --color-bg-footer:    var(--color-orange);
+    /* Gradient header OPTION — not approved. Sampled across the top of Baker's
+       BU26-BG-TIBC-O-9X6-Gradient artwork (2026-10-05), amber to red. Only
+       applied when <body> has class="chrome-gradient"; see section 5. */
+    --gradient-header: linear-gradient(90deg,
+        #FE9401 0%, #FD8F05 12.5%, #FA890A 25%, #F47D0F 37.5%, #E66011 50%,
+        #D8440F 62.5%, #CA290A 75%, #C21404 87.5%, #BE0601 100%);
     --color-divider:      rgba(0, 0, 0, 0.3);
 
     /* Interactive edges. WCAG 1.4.11 wants 3:1 against the adjacent colour for
@@ -347,7 +353,7 @@ body {
 /* ============================================================================
    5. COMPONENTS — site-header
    ----------------------------------------------------------------------------
-   Navy bar, logo only. The live site's mega-menu is deliberately not ported:
+   Orange bar, logo only. The live site's mega-menu is deliberately not ported:
    it depends on the site's JavaScript, weighs ~166KB of markup on its own, and
    every link in it leads away from the form the applicant is in the middle of.
    ============================================================================ */
@@ -356,6 +362,15 @@ body {
     background-color: var(--color-bg-header);
     position: relative;
     z-index: 10;
+}
+
+/* Gradient header option. The logo sits on the amber end, where black is
+   9.2:1; the red end carries no content, which is the only reason this works —
+   black on #BE0601 is ~3.2:1 and would fail for anything placed there. The
+   footer stays solid orange for the same reason: its text spans the full width.
+   Solid orange remains underneath as the fallback colour. */
+.chrome-gradient .site-header {
+    background-image: var(--gradient-header);
 }
 
 .site-header__inner {
