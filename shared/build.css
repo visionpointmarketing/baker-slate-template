@@ -24,15 +24,18 @@
 /* ============================================================================
    1. DESIGN TOKENS
    ----------------------------------------------------------------------------
-   The palette is the one Baker approved on 2026-10-02: orange header and
-   footer, orange buttons, black replacing navy throughout.
+   Baker's direction as of 2026-10-12: gradient header (approved 2026-10-11),
+   solid orange footer, brand-orange buttons with black labels, black
+   replacing navy throughout.
 
    Every value here has been checked for contrast, and the notes record which
    ones were constrained by that rather than chosen freely. Full table in
    README.md; the two that matter most:
 
-     black        on Baker Orange #F4771D  =  7.5:1   (was navy at 6.47:1)
-     white        on Autumn Maple #BC421B  =  5.34:1
+     black        on Baker Orange #F4771D  =  7.5:1   buttons, footer, tabs
+     white        on Baker Orange #F4771D  =  2.8:1   — fails AA, not used
+     Baker Orange on white                 =  2.8:1   — fails AA, never text
+     white        on Autumn Maple #BC421B  =  5.34:1  buttons-autumn-maple option
      black        on Autumn Maple #BC421B  =  3.93:1  — fails AA, not used
    ============================================================================ */
 
@@ -57,9 +60,13 @@
     --color-bg-page:      var(--color-white);
     --color-bg-header:    var(--color-orange);
     --color-bg-footer:    var(--color-orange);
-    /* Gradient header OPTION — not approved. Sampled across the top of Baker's
-       BU26-BG-TIBC-O-9X6-Gradient artwork (2026-10-05), amber to red. Only
-       applied when <body> has class="chrome-gradient"; see section 5. */
+    /* Buttons. Brand orange with a black label, as Baker asked on 2026-10-11.
+       The Autumn Maple alternative (white label) is kept as an opt-in class,
+       .buttons-autumn-maple, so both can be compared; see section 6. */
+    --color-button-bg:    var(--color-orange);
+    --color-button-text:  var(--color-black);
+    /* Header gradient, approved 2026-10-11. Sampled across the top of Baker's
+       BU26-BG-TIBC-O-9X6-Gradient artwork (2026-10-05), amber to red. */
     --gradient-header: linear-gradient(90deg,
         #FE9401 0%, #FD8F05 12.5%, #FA890A 25%, #F47D0F 37.5%, #E66011 50%,
         #D8440F 62.5%, #CA290A 75%, #C21404 87.5%, #BE0601 100%);
@@ -122,6 +129,14 @@
     --radius-pill:        9999px;
     --radius-sm:          8px;
     --transition-fast:    150ms ease;
+}
+
+/* Opt-in comparison: Autumn Maple buttons with a white label (5.34:1), the
+   treatment Baker approved on 2026-10-02. Add class="buttons-autumn-maple" to
+   <body> to use it. */
+.buttons-autumn-maple {
+    --color-button-bg:    var(--color-orange-deep);
+    --color-button-text:  var(--color-white);
 }
 
 
@@ -364,12 +379,12 @@ body {
     z-index: 10;
 }
 
-/* Gradient header option. The logo sits on the amber end, where black is
-   9.2:1; the red end carries no content, which is the only reason this works —
-   black on #BE0601 is ~3.2:1 and would fail for anything placed there. The
-   footer stays solid orange for the same reason: its text spans the full width.
-   Solid orange remains underneath as the fallback colour. */
-.chrome-gradient .site-header {
+/* Gradient header. The logo sits on the amber end, where black is 9.2:1; the
+   red end carries no content, which is the only reason this works — black on
+   #BE0601 is ~3.2:1 and would fail for anything placed there. The footer stays
+   solid orange for the same reason: its text spans the full width. Solid
+   orange stays underneath as the fallback colour. */
+.site-header {
     background-image: var(--gradient-header);
 }
 
@@ -829,12 +844,14 @@ input:not([type]) {
     margin: 0 0 var(--space-md);
 }
 
-/* Buttons — pill shaped, Autumn Maple fill, hover inverts to black with an
-   orange label.
+/* Buttons — pill shaped, brand orange fill with a black label (7.5:1), hover
+   inverts to black with an orange label (also 7.5:1).
 
-   The label is white rather than black: black on #BC421B is 3.93:1, just under
-   the 4.5:1 AA needs for a 16-18px label. White is 5.34:1 and passes. The
-   "no navy, use black" direction is carried everywhere else. */
+   Baker asked for brand orange with black text on 2026-10-11. Autumn Maple
+   (#BC421B) was their earlier answer to white text failing on brand orange;
+   a black label solves the same problem, so either passes AA. The Maple
+   version is kept in section 1 as .buttons-autumn-maple — black on
+   Maple would be 3.93:1, so that option keeps its white label. */
 button.default,
 button[type=button],
 button[type=submit],
@@ -842,8 +859,8 @@ button[type=submit],
     padding: 12px 32px;
     border: 2px solid transparent;
     border-radius: var(--radius-pill);
-    background-color: var(--color-orange-deep);
-    color: var(--color-white);
+    background-color: var(--color-button-bg);
+    color: var(--color-button-text);
     font-weight: 700;
     cursor: pointer;
     transition: background-color var(--transition-fast), color var(--transition-fast);
@@ -917,10 +934,9 @@ ul.tabs li a {
     text-decoration: none;
 }
 
-/* The selected tab is Cadmium Orange with a black label, not the Autumn Maple
-   used by the primary buttons. Two reasons: #BC421B is reserved for primary
-   calls to action, so a tab wearing it would compete with the real CTA on the
-   same page; and black on #F4771D is 7.5:1 where white on #BC421B is 5.34:1. */
+/* The selected tab is Cadmium Orange with a black label, 7.5:1. It now
+   matches the buttons; the tabs stay smaller and sit in a row of outlined
+   pills, which is what tells them apart from a call to action. */
 #content ul.subtabs li a.selected {
     background-color: var(--color-orange) !important;
     color: var(--color-black) !important;

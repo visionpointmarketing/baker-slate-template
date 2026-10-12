@@ -46,7 +46,8 @@ Pages. `.nojekyll` is committed so Pages serves the files as they are.
 
 Baker signed off on 2026-10-02: orange header and footer, orange buttons, black
 replacing navy throughout, buttons rounded rather than square, hover going to a
-black fill with an orange label.
+black fill with an orange label. On 2026-10-11 they moved the header to their
+orange gradient and asked for buttons in brand orange with black labels.
 
 Three choices inside that were settled by contrast rather than preference, and
 each is worth being able to explain:
@@ -54,7 +55,8 @@ each is worth being able to explain:
 | Element | Decision | Why |
 | --- | --- | --- |
 | Text on the orange bands | black | 7.5:1, up from navy's 6.47:1 — dropping navy improved it |
-| Primary CTA label | **white** on `#BC421B` | black on `#BC421B` is 3.93:1 and fails AA; white is 5.34:1 |
+| Buttons | **black** on Cadmium Orange `#F4771D` | 7.5:1. White on `#F4771D` is 2.8:1, which is why Baker built Autumn Maple `#BC421B`; a black label solves the same problem. The Maple option (`index-maple.html`) keeps a **white** label, since black on Maple is 3.93:1 |
+| Header gradient | logo on the amber end only | black is 9.2:1 on the amber end but ~3.2:1 on the red end, so nothing goes on the right; the footer stays solid orange because its text spans the full width |
 | Links in content | `#BC421B`, underlined | Cadmium Orange is 2.8:1 on white and can never be text; Autumn Maple is 5.34:1 |
 
 Two more that were not in the feedback but were fixed in the same pass, both
@@ -208,11 +210,15 @@ in headless Chromium at phone and tablet widths. Checked and fixed:
       black replacing navy, rounded controls
 - [x] One-colour black lockup extracted from Baker's brand guidelines PDF and
       applied to header and footer
-- [x] Gradient header option for review (`index-gradient.html`,
-      `portal-gradient.html`) from Baker's 2026-10-05 gradient artwork. Opt-in
-      via `<body class="chrome-gradient">`; header only, footer stays solid
-      orange because black text fails on the red end (~3.2:1). Not approved —
-      Baker is still developing the gradient with their agency.
+- [x] Gradient header option for review, from Baker's 2026-10-05 gradient
+      artwork (header only; footer stays solid orange)
+- [x] Client feedback of 2026-10-11 applied: gradient header is now the
+      default, buttons are brand orange with black labels. Autumn Maple
+      buttons kept for comparison (`index-maple.html`, `portal-maple.html`,
+      `<body class="buttons-autumn-maple">`). The old `*-gradient.html` URLs
+      redirect to the main pages.
+- [ ] Confirm the footer colour with Baker — Morgan noted on 2026-10-08 that
+      the solid orange no longer matches the gradient; no decision yet
 - [ ] Upload the logo into Slate at `/images/logo-baker-onecolor-black.svg`
 - [ ] Deploy to Slate (`shared/README.md`)
 
