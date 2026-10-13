@@ -24,9 +24,9 @@
 /* ============================================================================
    1. DESIGN TOKENS
    ----------------------------------------------------------------------------
-   Baker's direction as of 2026-10-12: gradient header (approved 2026-10-11),
-   solid orange footer, brand-orange buttons with black labels, black
-   replacing navy throughout.
+   The design Baker approved on 2026-10-13: gradient header, solid orange
+   footer, brand-orange buttons with black labels, black replacing navy
+   throughout.
 
    Every value here has been checked for contrast, and the notes record which
    ones were constrained by that rather than chosen freely. Full table in
@@ -35,8 +35,7 @@
      black        on Baker Orange #F4771D  =  7.5:1   buttons, footer, tabs
      white        on Baker Orange #F4771D  =  2.8:1   — fails AA, not used
      Baker Orange on white                 =  2.8:1   — fails AA, never text
-     white        on Autumn Maple #BC421B  =  5.34:1  buttons-autumn-maple option
-     black        on Autumn Maple #BC421B  =  3.93:1  — fails AA, not used
+     Autumn Maple #BC421B on white         =  5.34:1  links in content
    ============================================================================ */
 
 :root {
@@ -60,12 +59,10 @@
     --color-bg-page:      var(--color-white);
     --color-bg-header:    var(--color-orange);
     --color-bg-footer:    var(--color-orange);
-    /* Buttons. Brand orange with a black label, as Baker asked on 2026-10-11.
-       The Autumn Maple alternative (white label) is kept as an opt-in class,
-       .buttons-autumn-maple, so both can be compared; see section 6. */
+    /* Buttons. Brand orange with a black label, as Baker asked on 2026-10-11. */
     --color-button-bg:    var(--color-orange);
     --color-button-text:  var(--color-black);
-    /* Header gradient, approved 2026-10-11. Sampled across the top of Baker's
+    /* Header gradient, approved 2026-10-13. Sampled across the top of Baker's
        BU26-BG-TIBC-O-9X6-Gradient artwork (2026-10-05), amber to red. */
     --gradient-header: linear-gradient(90deg,
         #FE9401 0%, #FD8F05 12.5%, #FA890A 25%, #F47D0F 37.5%, #E66011 50%,
@@ -129,14 +126,6 @@
     --radius-pill:        9999px;
     --radius-sm:          8px;
     --transition-fast:    150ms ease;
-}
-
-/* Opt-in comparison: Autumn Maple buttons with a white label (5.34:1), the
-   treatment Baker approved on 2026-10-02. Add class="buttons-autumn-maple" to
-   <body> to use it. */
-.buttons-autumn-maple {
-    --color-button-bg:    var(--color-orange-deep);
-    --color-button-text:  var(--color-white);
 }
 
 
@@ -849,9 +838,8 @@ input:not([type]) {
 
    Baker asked for brand orange with black text on 2026-10-11. Autumn Maple
    (#BC421B) was their earlier answer to white text failing on brand orange;
-   a black label solves the same problem, so either passes AA. The Maple
-   version is kept in section 1 as .buttons-autumn-maple — black on
-   Maple would be 3.93:1, so that option keeps its white label. */
+   a black label solves the same problem. (If the buttons ever go back to
+   Maple, the label must be white: black on Maple is 3.93:1 and fails AA.) */
 button.default,
 button[type=button],
 button[type=submit],
@@ -899,6 +887,13 @@ button[type=submit]:focus-visible {
 /* Decision-letter confetti canvas sits above page content. */
 body > canvas {
     z-index: 500;
+}
+
+/* Slate's #global area (sign in / sign out links, floated right by the inline
+   <style> in build.xslt). Spacing carried forward from Baker's previous
+   build.css so the links don't run together. */
+#global li {
+    margin-right: 14px !important;
 }
 
 /* Portfolio / file uploader */

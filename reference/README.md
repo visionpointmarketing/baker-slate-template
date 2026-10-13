@@ -7,7 +7,8 @@ task (VPM-46834). Drop them here unchanged:
 - `build.css`
 - `build-fonts.css`
 
-Nothing in this folder ships. It exists so the files we hand back can be
+Added 2026-10-13 and reconciled — see `shared/README.md`, step 1 of "Before
+the first deploy". Nothing in this folder ships. It exists so the files we hand back can be
 diffed against what Baker's instance runs today.
 
 ## Why this matters

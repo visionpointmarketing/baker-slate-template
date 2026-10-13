@@ -14,14 +14,11 @@ application checklist, decision letters.
 
 ## Before the first deploy
 
-1. **Reconcile against Baker's current files.** Put their existing
-   `build.xslt`, `build.css` and `build-fonts.css` in `../reference/` and diff.
-   `build.xslt` here was written against a known-good Slate page template from
-   a previous implementation, so check theirs for anything instance-specific:
-   the `<template path="...">` reference, extra `<link>`/`<script>` includes,
-   any inline `<style>` beyond Slate's standard block. Section 6 of `build.css`
-   needs the same treatment — carry forward any Slate UI rule their instance
-   depends on.
+1. **Reconcile against Baker's current files.** Done 2026-10-13 — their
+   files are in `../reference/`. Baker was running Slate's unbranded starter
+   template; the `<template path>`, mobile CSS/JS includes, inline `<style>`
+   and every Slate UI rule are carried forward here. Their Raleway font is
+   intentionally replaced by Newsreader and Roboto.
 2. **Upload the logo.** Database → Configurations → Files, at `/images/`, so it
    resolves as `/images/logo-baker-onecolor-black.svg`.
 3. **Validate the XSLT.** It has to be well-formed XML or Slate will reject it:
@@ -49,7 +46,7 @@ browsers keep the cached stylesheet and the deploy looks like it did nothing.
 
 ### 1b. No theme class needed
 
-Baker approved the orange treatment on 2026-10-02 and it is the default in
+Baker approved the final design on 2026-10-13 and it is the default in
 `build.css`. `<body>` carries no theme class; there is nothing to set.
 
 ### 2. Paste into the Branding Editor
@@ -71,9 +68,15 @@ Click **Preview**, which renders using the saved-but-unpublished files. Check:
 - A portal page, if one exists
 - At least one page on a phone-width viewport
 
-Looking for: navy header with the Baker logo; the footer with social, contact,
-utility and legal rows; navy underlined links inside `#content`; navy pill
-buttons; selected subtab filled navy; no sideways scrolling.
+Looking for:
+
+- Header: orange-to-red gradient with the black Baker logo on the left
+- Footer: solid orange, black text, with social, contact, utility and legal rows
+- Buttons: orange pills with black text, turning black with orange text on hover
+- Selected checklist subtab: filled orange with black text
+- Links inside `#content`: Autumn Maple (dark orange), underlined
+- No navy anywhere, and no sideways scrolling on a phone
+- The logo loads (if it shows as alt text, the `/images/` upload is missing)
 
 ### 4. Publish
 

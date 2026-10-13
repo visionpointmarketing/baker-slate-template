@@ -47,7 +47,8 @@ Pages. `.nojekyll` is committed so Pages serves the files as they are.
 Baker signed off on 2026-10-02: orange header and footer, orange buttons, black
 replacing navy throughout, buttons rounded rather than square, hover going to a
 black fill with an orange label. On 2026-10-11 they moved the header to their
-orange gradient and asked for buttons in brand orange with black labels.
+orange gradient and asked for buttons in brand orange with black labels, and
+approved that as the final design on 2026-10-13.
 
 Three choices inside that were settled by contrast rather than preference, and
 each is worth being able to explain:
@@ -55,7 +56,7 @@ each is worth being able to explain:
 | Element | Decision | Why |
 | --- | --- | --- |
 | Text on the orange bands | black | 7.5:1, up from navy's 6.47:1 — dropping navy improved it |
-| Buttons | **black** on Cadmium Orange `#F4771D` | 7.5:1. White on `#F4771D` is 2.8:1, which is why Baker built Autumn Maple `#BC421B`; a black label solves the same problem. The Maple option (`index-maple.html`) keeps a **white** label, since black on Maple is 3.93:1 |
+| Buttons | **black** on Cadmium Orange `#F4771D` | 7.5:1. White on `#F4771D` is 2.8:1, which is why Baker built Autumn Maple `#BC421B`; a black label solves the same problem. If buttons ever go back to Maple, the label must be **white**: black on Maple is 3.93:1 |
 | Header gradient | logo on the amber end only | black is 9.2:1 on the amber end but ~3.2:1 on the red end, so nothing goes on the right; the footer stays solid orange because its text spans the full width |
 | Links in content | `#BC421B`, underlined | Cadmium Orange is 2.8:1 on white and can never be text; Autumn Maple is 5.34:1 |
 
@@ -200,9 +201,6 @@ in headless Chromium at phone and tablet widths. Checked and fixed:
 - [x] Staging pages, `build.css`, `build-fonts.css`, `build.xslt`
 - [x] `images/logo-baker-onecolor-black.svg` in place (from Baker's brand guidelines PDF)
 - [x] Browser QA pass
-- [ ] Drop Baker's current Slate files into `reference/` and reconcile — the
-      Slate UI overrides in `build.css` section 6 came from a known-good
-      implementation, not from Baker's own instance
 - [x] Publish staging for client review
 - [x] Orange alternate treatments for client review (all orange, plus the two
       mixed pairs)
@@ -213,12 +211,14 @@ in headless Chromium at phone and tablet widths. Checked and fixed:
 - [x] Gradient header option for review, from Baker's 2026-10-05 gradient
       artwork (header only; footer stays solid orange)
 - [x] Client feedback of 2026-10-11 applied: gradient header is now the
-      default, buttons are brand orange with black labels. Autumn Maple
-      buttons kept for comparison (`index-maple.html`, `portal-maple.html`,
-      `<body class="buttons-autumn-maple">`). The old `*-gradient.html` URLs
-      redirect to the main pages.
-- [ ] Confirm the footer colour with Baker — Morgan noted on 2026-10-08 that
-      the solid orange no longer matches the gradient; no decision yet
+      default, buttons are brand orange with black labels
+- [x] Final design approved by Baker on 2026-10-13 (gradient header, solid
+      orange footer, brand-orange buttons). Review-option pages
+      (`*-gradient.html`, `*-maple.html`) now redirect to the main pages
+- [x] Reconciled against Baker's current Slate files (`reference/`, 2026-10-13).
+      Their instance runs Slate's unbranded starter template; every
+      Slate-specific include and UI rule is carried forward, plus `#global li`
+      spacing, which was the one rule missing
 - [ ] Upload the logo into Slate at `/images/logo-baker-onecolor-black.svg`
 - [ ] Deploy to Slate (`shared/README.md`)
 
