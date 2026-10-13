@@ -219,8 +219,10 @@ in headless Chromium at phone and tablet widths. Checked and fixed:
       Their instance runs Slate's unbranded starter template; every
       Slate-specific include and UI rule is carried forward, plus `#global li`
       spacing, which was the one rule missing
-- [ ] Upload the logo into Slate at `/images/logo-baker-onecolor-black.svg`
-- [ ] Deploy to Slate (`shared/README.md`)
+- [x] Logo uploaded to Slate at `/images/logo-baker-onecolor-black.svg` (2026-10-13)
+- [x] Deployed to Slate and published (2026-10-13), verified live on `/apply`
+- [x] Follow-up published the same day: Slate landing-page lines unbolded,
+      layout-table rule removed, `#global` (Logout) links styled
 
 ---
 
