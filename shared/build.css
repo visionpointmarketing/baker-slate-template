@@ -618,12 +618,13 @@ body {
    if a future Slate release breaks one, comment it out rather than deleting it
    — that keeps the history of why it existed.
 
-   IMPORTANT: reconcile this section against Baker's current build.css (in
-   /reference) before handing the files to Charlie. Anything Baker's instance
-   already relies on that is not represented here needs to be carried forward.
+   Reconciled against Baker's previous build.css (in /reference) on
+   2026-10-13: every Slate UI rule their instance relied on is carried here.
    ============================================================================ */
 
-/* Links inside Slate content: Autumn Maple, underlined, going black on hover.
+/* Links inside Slate content, and in Slate's #global bar (the signed-in name
+   and Logout link above the content): Autumn Maple, underlined, going black on
+   hover. Without the #global selectors, Logout falls back to browser blue.
 
    Cadmium Orange is 2.8:1 on white and can never be a text colour. Autumn
    Maple is 5.34:1 and passes, so it carries the orange direction into the body
@@ -631,14 +632,20 @@ body {
    the only thing marking a link (WCAG 1.4.1). */
 #content a,
 #content a:link,
-#content a:visited {
+#content a:visited,
+#global a,
+#global a:link,
+#global a:visited {
     color: var(--color-link);
     text-decoration: underline;
 }
 
 #content a:hover,
 #content a:active,
-#content a:focus-visible {
+#content a:focus-visible,
+#global a:hover,
+#global a:active,
+#global a:focus-visible {
     color: var(--color-black);
     text-decoration: underline;
 }
@@ -726,6 +733,22 @@ body {
     font-weight: 700;
     color: var(--color-text-heading);
     border-bottom-width: 2px;
+}
+
+/* Slate's application landing page ("Returning users" / "First-time users")
+   uses a table.fixed purely for its two-column layout: each cell is an <h2>
+   followed by a line wrapped in <b>. That is layout, not data, so it gets no
+   row rule or cell inset (keeping the headings on the content's left edge),
+   and the line under each heading reads at body weight rather than bold.
+   Scoped to cells that contain an <h2>, so data tables are untouched.
+   Browsers without :has() keep the rule and inset — cosmetic only. */
+#content table.fixed td:has(> h2) {
+    border-bottom: 0;
+    padding-left: 0;
+}
+
+#content table.fixed td > h2 + b {
+    font-weight: inherit;
 }
 
 /* Slate floats the portal sidebar; keep that here so staging matches. */

@@ -8,8 +8,8 @@
              or build-fonts.css changes, or Slate will keep serving the old copy.
              Note this trick works for <link href> but NOT for image src — Slate
              strips query strings from those. See images/README.md. -->
-        <link href="/shared/build-fonts.css?v=202610131720" rel="stylesheet" />
-        <link href="/shared/build.css?v=202610131720" rel="stylesheet" />
+        <link href="/shared/build-fonts.css?v=202610131754" rel="stylesheet" />
+        <link href="/shared/build.css?v=202610131754" rel="stylesheet" />
         <link href="/shared/build-mobile-global.css" rel="stylesheet" />
         <script src="/shared/build-mobile-global.js" />
         <style>html &gt; body { line-height: normal; } ul.cr, li.cr { margin: 0; padding: 0; } #content { clear: both; padding: 15px; } #global { float: right; } #global ul, #global li { list-style: none; margin: 0; padding: 0; }</style>
