@@ -162,6 +162,24 @@ A full modern CSS reset breaks Slate's own form rendering, checklist and menus.
 `build.css` section 2 is the safe subset: box-sizing, media defaults, motion
 preferences and a screen-reader utility. Resist the urge to "finish" it.
 
+### Fieldsets are questions, not sections
+
+Slate wraps every multi-control question (birthdate, radio and checkbox groups)
+in its own `<fieldset>`, with the question text as the `<legend>`. The fieldset
+and legend are kept for screen readers but carry no visual treatment: no border,
+no inset, legend styled like any other question label. That keeps these
+questions on the same left edge and vertical rhythm as single-input questions.
+Styling `fieldset` as an outlined panel puts a box around individual questions
+on the live form (ClickUp VPM-50306), so don't reintroduce one.
+
+The three birthdate selects sit on one row at their natural width and wrap only
+if a screen is too narrow. Slate's own mobile rule already exempts them from
+full width.
+
+The staging form uses Slate's question-level fieldset markup for its birthdate
+and radio questions, and plain `<h2>` headings for its sections, so staging
+renders the way production does.
+
 ---
 
 ## Slate gotchas this template accounts for
@@ -185,7 +203,8 @@ Reviewed by Breon Williams on 2026-09-24, in Chrome against a local server and
 in headless Chromium at phone and tablet widths. Checked and fixed:
 
 - Logo, content and footer all share one left gutter at every width
-- Fieldset default inline margin knocking the form off that gutter
+- Fieldset default margin and inset knocking questions off that gutter (revised
+  2026-10-26: question-level fieldsets carry no outline or inset)
 - Header brand link falling back to default link blue if the logo fails to load
 - Body type set to the site's 18px/30px rhythm; lede at 20px
 - Slate form questions: labels above controls, inputs at a consistent width
@@ -223,6 +242,11 @@ in headless Chromium at phone and tablet widths. Checked and fixed:
 - [x] Deployed to Slate and published (2026-10-13), verified live on `/apply`
 - [x] Follow-up published the same day: Slate landing-page lines unbolded,
       layout-table rule removed, `#global` (Logout) links styled
+- [x] Form-question fix (ClickUp VPM-50306, 2026-10-26): outline and inset
+      removed from question fieldsets, birthdate selects on one row. Committed
+      and checked on staging at desktop and 375px
+- [ ] Deploy the VPM-50306 fix to Slate (`?v=` already bumped in `build.xslt`)
+      and check the CAS Fast App birthdate and citizenship questions
 
 ---
 

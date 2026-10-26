@@ -788,8 +788,29 @@ input:not([type]) {
     margin-bottom: var(--space-sm);
 }
 
-#content .form_question > label {
+#content .form_question > label,
+#content .form_question .form_label {
     display: block;
+    margin-bottom: var(--space-2xs);
+}
+
+/* Slate wraps each multi-control question (birthdate, radio and checkbox
+   groups) in its own <fieldset> with a <legend class="form_label">. The
+   fieldset is there for screen readers, not as a visual group: it gets no
+   border or inset, so the question sits on the same left edge and rhythm as
+   the single-input questions around it, and the legend reads as a label.
+   min-inline-size stops the fieldset's min-content default from letting
+   wide controls push past the column on a phone. */
+#content fieldset {
+    border: 0;
+    padding: 0;
+    margin: 0;
+    min-inline-size: 0;
+}
+
+#content legend {
+    max-width: 100%;   /* IE/Edge legend wrapping */
+    padding: 0;
     margin-bottom: var(--space-2xs);
 }
 
@@ -836,24 +857,25 @@ input:not([type]) {
 }
 
 #content .form_label,
-#content .form_question > label {
+#content .form_question > label,
+#content .form_question legend {
     font-weight: 500;
 }
 
-#content legend {
-    max-width: 100%;   /* IE/Edge legend wrapping */
-    font-family: var(--font-heading);
-    font-size: var(--fz-h3);
-    color: var(--color-text-heading);
+/* Birthdate is three selects (month, day, year) that belong on one row. The
+   100% width above would stack them, and the whitespace between inline selects
+   then nudged the 2nd and 3rd off the left edge. Slate's own mobile rule
+   already exempts these selects from full width. They wrap only if a phone is
+   too narrow for all three. */
+#content .form_question[class*="form_birthdate"] .form_responses {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
 }
 
-#content fieldset {
-    border: 1px solid var(--color-border-input);
-    border-radius: var(--radius-sm);
-    padding: var(--space-md);
-    /* Browsers give fieldset a default 2px inline margin, which knocks it off
-       the left gutter the heading and chrome share. */
-    margin: 0 0 var(--space-md);
+#content .form_question[class*="form_birthdate"] select {
+    width: auto;
+    margin: 0;
 }
 
 /* Buttons — pill shaped, brand orange fill with a black label (7.5:1), hover
